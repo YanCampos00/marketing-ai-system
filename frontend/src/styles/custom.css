@@ -1,0 +1,15 @@
+
+:root {
+  --primary-bg: #1E1E1E;
+  --secondary-bg: #2C2C2C;
+  --primary-text: #FFFFFF;
+  --secondary-text: #B0B0B0;
+  --cta-yellow: #FFD600;
+  --info-blue: #2EA7FF;
+  --dark-contrast: #000000;
+}
+
+body {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+}

@@ -1,0 +1,39 @@
+Cliente: Marca com lifestyle jovem, urbano e rocker, referência em jeans com design diferenciado e um mix completo de roupas e acessórios femininos e masculinos. Foco em autenticidade, atitude e presença em festas e festivais.
+Periodo: May de 2025
+
+Destaques_Per_Plataforma:
+  Google_Ads:
+    Principal_KPI: ROI
+    Alertas_Analiticos_Chave:
+      - Volatilidade diária acentuada com dias de performance muito abaixo da média.
+      - Aumento do Custo por Conversão (CPC) impactando a rentabilidade.
+    Oportunidades_Analiticas_Chave:
+      - Análise dos picos de performance para identificar fatores de sucesso e replicar.
+      - Explorar estratégias para capitalizar a tendência positiva do Ticket Médio (TKM).
+    Tendencia_Impactante: Piorando - Declínio constante do ROI e Taxa de Conversão nos últimos meses.
+  Meta_Ads:
+    Principal_KPI: ROI
+    Alertas_Analiticos_Chave:
+      - ROI geral de maio criticamente baixo impulsionado por alta frequência de dias com performance ruim/negativa.
+      - Queda acentuada e inconsistência diária na taxa de conversão, indicando problemas na qualidade do tráfego ou experiência pós-clique em períodos específicos.
+    Oportunidades_Analiticas_Chave:
+      - Analisar dias de alta performance para identificar padrões de sucesso (criativos, segmentação, horários).
+      - Investigar a jornada do usuário e a experiência no site nos dias de alto volume de sessões mas baixa conversão.
+    Tendencia_Impactante: Piorando - Queda drástica no ROI, Receita e Taxa de Conversão comparado a meses anteriores e YoY.
+
+Analise_Consolidada:
+  Comparativo_e_Sinergias: Ambas as plataformas apresentaram tendência de piora consistente em métricas-chave como ROI, Receita e Taxa de Conversão, com destaque para a queda acentuada em maio. Um ponto comum crítico é a alta volatilidade diária e a ocorrência frequente de dias com performance muito baixa ou negativa, impactando o resultado agregado do mês. O aumento do custo por conversão/aquisição é um fator relevante em ambas as plataformas.
+  Diagnostico_Principal: O principal desafio do período foi a queda significativa na eficiência de conversão e rentabilidade (ROI) em ambas as plataformas, amplificada pela inconsistência diária e a dificuldade em manter uma performance positiva de forma contínua.
+
+Recomendacoes_Estrategicas:
+  Google_Ads:
+    - Realizar análise aprofundada dos dias de pico de performance para isolar variáveis de sucesso (campanha, criativo, audiência, horário, promoção) e aplicar learnings.
+    - Revisar segmentações e lances para mitigar o aumento do CPC e melhorar a eficiência na aquisição de conversões rentáveis.
+  Meta_Ads:
+    - Conduzir uma análise granular dos dias de baixa performance e alta sessão/baixa conversão para identificar gargalos na jornada pós-clique ou qualidade do tráfego em dias específicos.
+    - Testar e escalar os padrões identificados nos dias de alta performance (criativos, segmentação, abordagens).
+  Cross_Plataforma:
+    - Desenvolver um plano de ação para mitigar a volatilidade diária e reduzir a frequência de dias com performance negativa.
+    - Alinhar insights de performance positiva (ex: quais tipos de criativos ou ofertas performam melhor nos picos) e negativa (ex: problemas de site/jornada) entre as equipes de plataforma.
+
+Ponto_Critico_Unico: A performance de mídia paga em maio foi criticamente impactada pela queda acentuada e generalizada do ROI e Taxa de Conversão em ambas as plataformas, impulsionada pela alta frequência de dias com resultados negativos ou muito baixos.

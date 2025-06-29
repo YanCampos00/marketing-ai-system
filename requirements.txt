@@ -1,0 +1,11 @@
+fastapi==0.111.0
+uvicorn==0.30.1
+gspread
+oauth2client
+google-generativeai
+python-dotenv
+pandas
+python-dateutil
+tenacity
+SQLAlchemy
+tabulate

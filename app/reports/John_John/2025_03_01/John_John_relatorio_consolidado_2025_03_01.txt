@@ -1,0 +1,39 @@
+Cliente: Marca com lifestyle jovem, urbano e rocker, referência em jeans com design diferenciado e um mix completo de roupas e acessórios femininos e masculinos. Foco em autenticidade, atitude e presença em festas e festivais.
+Periodo: March de 2025
+
+Destaques_Per_Plataforma:
+  Google_Ads:
+    Principal_KPI: ROI
+    Alertas_Analiticos_Chave:
+      - Queda acentuada na Taxa de Conversão em Março, sugerindo problemas pontuais na qualidade do tráfego ou na experiência do usuário no site.
+      - Dias com alto investimento apresentaram ROI desproporcionalmente baixo, indicando ineficiência na alocação de budget ao escalar.
+    Oportunidades_Analiticas_Chave:
+      - Analisar dias de alta performance para identificar padrões replicáveis de campanhas, públicos ou criativos.
+      - Explorar estratégias para capitalizar o Ticket Médio implícito mais alto observado no período.
+    Tendencia_Impactante: Piora significativa no ROI recente, atingindo o menor nível dos últimos 5 meses e inferior ao ano anterior.
+  Meta_Ads:
+    Principal_KPI: ROI
+    Alertas_Analiticos_Chave:
+      - Extrema volatilidade diária de ROI e Taxa de Conversão, com dias de performance muito baixa impactando a média mensal.
+      - Ocorrência de dias com alto volume de sessões mas conversões e ROI extremamente baixos, sugerindo possíveis problemas de qualidade de tráfego, site ou tracking em datas específicas.
+    Oportunidades_Analiticas_Chave:
+      - Identificação de padrão de alta performance em fins de semana, indicando potencial para otimizar alocação de budget/estratégias.
+      - Investigar causas raiz da baixa performance nos dias críticos identificados para corrigir problemas e reduzir desperdício.
+    Tendencia_Impactante: Queda significativa no ROI MoM e em relação à média dos últimos meses, apesar do aumento de receita e volume.
+
+Analise_Consolidada:
+  Comparativo_e_Sinergias: Ambas as plataformas apresentaram piora na eficiência (ROI e Taxa de Conversão) em Março MoM, apesar do aumento de receita (mais notável em Meta). Há um padrão comum de volatilidade diária e dias específicos com performance muito baixa (alto tráfego/investimento, baixo ROI/CR), sugerindo desafios compartilhados de qualidade de tráfego, tracking ou experiência do usuário no site. Google Ads destacou um aumento no Ticket Médio, enquanto Meta Ads identificou potencial de otimização em fins de semana.
+  Diagnostico_Principal: O principal desafio do período foi a deterioração da eficiência geral da mídia paga (ROI e Taxa de Conversão) devido à inconsistência de performance diária e possíveis problemas subjacentes (site, tracking, qualidade do tráfego) que se manifestam em dias de baixo desempenho, diluindo os resultados positivos.
+
+Recomendacoes_Estrategicas:
+  Google_Ads:
+    - Realizar análise aprofundada dos dias de baixa performance para identificar a causa da queda de CR e baixo ROI (qualidade do tráfego, landing page, tracking).
+    - Testar estratégias de campanha ou otimização focadas em capitalizar o comportamento de compra de maior Ticket Médio.
+  Meta_Ads:
+    - Priorizar a investigação dos dias de performance crítica para identificar e corrigir problemas de tracking, site ou segmentação.
+    - Realizar testes de alocação de budget e estratégias específicas para fins de semana, capitalizando o padrão de alta performance identificado.
+  Cross_Plataforma:
+    - Conduzir um diagnóstico técnico e de usabilidade do site focado nos dias de baixa performance identificados em ambas as plataformas.
+    - Sincronizar análises de público e criativos entre as plataformas para entender o que funcionou nos dias de alta performance e replicar.
+
+Ponto_Critico_Unico: A ocorrência de dias com alto investimento/tráfego e ROI/Taxa de Conversão extremamente baixos, presente em ambas as plataformas, indica um problema sistêmico (potencialmente tracking, site ou qualidade de tráfego) que está gerando desperdício significativo de budget e impactando a eficiência geral.

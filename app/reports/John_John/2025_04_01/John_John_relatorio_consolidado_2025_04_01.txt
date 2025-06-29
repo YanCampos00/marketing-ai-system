@@ -1,0 +1,39 @@
+Cliente: Marca com lifestyle jovem, urbano e rocker, referência em jeans com design diferenciado e um mix completo de roupas e acessórios femininos e masculinos. Foco em autenticidade, atitude e presença em festas e festivais.
+Periodo: April de 2025
+
+Destaques_Per_Plataforma:
+  Google_Ads:
+    Principal_KPI: ROI
+    Alertas_Analiticos_Chave:
+      - Queda acentuada de performance na segunda quinzena, com dias de ROI negativo/muito baixo.
+      - Aumento do Ticket Médio não compensou a queda no volume e taxa de conversão.
+    Oportunidades_Analiticas_Chave:
+      - Analisar padrões de alta performance no início do mês para replicar.
+      - Investigar causas da baixa performance na segunda quinzena para otimizar/pausar campanhas ineficientes.
+    Tendencia_Impactante: ROI, Receita e Taxa de Conversão piorando, atingindo o menor patamar dos últimos 5 meses.
+  Meta_Ads:
+    Principal_KPI: ROI
+    Alertas_Analiticos_Chave:
+      - Queda drástica de performance e investimento no meio do mês (aprox. 09/04 a 23/04), com muitos dias de ROI abaixo de 2.0x.
+      - Redução significativa do Ticket Médio MoM.
+    Oportunidades_Analiticas_Chave:
+      - Analisar e replicar estratégias (criativos, públicos, ofertas) que geraram picos de alta performance/ROI na última semana.
+      - Investigar a causa da queda do TKM para otimizar para maior valor por conversão.
+    Tendencia_Impactante: Queda acentuada de ROI e Receita MoM (-55.9% receita), apesar do crescimento robusto YoY.
+
+Analise_Consolidada:
+  Comparativo_e_Sinergias: Ambas as plataformas apresentaram queda acentuada de performance (ROI e Receita) em Abril, impactadas por períodos de baixa eficiência concentrados na segunda metade do mês (Google Ads) ou meio do mês (Meta Ads). A necessidade de investigar e replicar padrões de alta performance e otimizar/pausar o que não performou é um tema comum. Divergência no TKM (aumento no Google, queda no Meta).
+  Diagnostico_Principal: Abril foi um mês de desafio significativo para a mídia paga, marcado por queda generalizada de eficiência e receita, especialmente no ROI, puxada por períodos de baixa performance concentrada em ambas as plataformas.
+
+Recomendacoes_Estrategicas:
+  Google_Ads:
+    - Realizar análise detalhada dos dias de alta performance no início do mês para identificar e escalar táticas vencedoras.
+    - Auditar e otimizar/pausar campanhas com baixo ROI na segunda quinzena de Abril.
+  Meta_Ads:
+    - Isolar e replicar as estratégias (criativos, públicos, ofertas) que geraram alto ROI na última semana de Abril.
+    - Investigar a fundo a causa da queda do TKM e ajustar estratégias para incentivar compras de maior valor.
+  Cross_Plataforma:
+    - Realizar análise unificada dos períodos de baixa performance em ambas as plataformas para identificar possíveis causas comuns (ex: site, estoque, sazonalidade, concorrência).
+    - Compartilhar learnings sobre criativos e públicos de alta performance entre as equipes de plataforma.
+
+Ponto_Critico_Unico: A queda acentuada e inconsistente do ROI e Receita em ambas as plataformas, concentrada em períodos específicos do mês, sugere problemas táticos ou externos que requerem investigação e ação imediata para evitar a continuidade da tendência em Maio.

@@ -1,0 +1,13 @@
+Tendencias:
+  ROI_Recente: Piorando - Queda significativa em Maio (2.29) comparado a Abril (3.12), Maio/24 (3.08) e à tendência de melhora dos meses anteriores (Jan-Abr).
+  Receita_Recente: Piorando - Diminuição MoM e YoY, atingindo o menor patamar dos últimos 5 meses, apesar do aumento de investimento.
+  Taxa_Conversao_Recente: Piorando - Redução MoM e YoY, sendo a menor taxa dos últimos 5 meses, indicando menor eficiência em transformar sessões em vendas.
+
+Alertas_Analiticos:
+  - Alerta 1: Alta volatilidade diária de ROI e Taxa de Conversão, com múltiplos dias de performance extremamente baixa (ROI < 1.5 e CR < 0.15%), especialmente na segunda quinzena, sugerindo inconsistência severa na performance das campanhas ou fatores externos impactando a conversão.
+  - Alerta 2: A redução significativa de investimento na segunda metade do mês não resultou em melhora proporcional da eficiência (ROI/CR), indicando que os problemas de performance podem não estar ligados apenas ao volume de spend, mas a questões estruturais de segmentação, criativos ou funil de conversão.
+
+Oportunidades_Analiticas:
+  - Oportunidade 1: Identificar e analisar os dias de performance positiva (ex: 01, 02, 10, 14, 16, 18, 21, 26 de Maio) para extrair padrões de campanhas, criativos, horários ou públicos que geraram ROI e Conversões acima da média, replicando esses sucessos.
+  - Oportunidade 2: O Ticket Médio (R$ 343.63) se manteve estável MoM e aumentou YoY, apesar da queda no volume de conversões. Há uma oportunidade em focar na qualidade do tráfego para aumentar o volume de conversões mantendo o TKM, ou explorar estratégias para aumentar ainda mais o TKM nas conversões existentes.
+#

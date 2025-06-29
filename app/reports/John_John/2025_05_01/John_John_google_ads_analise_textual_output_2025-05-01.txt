@@ -1,0 +1,13 @@
+Tendencias:
+  ROI_Recente: Piorando - Decline from Feb peak (4.17) and MoM drop (3.28 para 3.12), apesar da melhora YoY (2.82 para 3.12).
+  Receita_Recente: Volátil - Significant month-to-month fluctuations in the last 5 months (Jan R$400k, Apr R$265k, May R$281k).
+  Taxa_Conversao_Recente: Piorando - Consistent decline since Feb 2025 (0.70%) and lowest rate in the last 5 months (0.43% em Maio).
+
+Alertas_Analiticos:
+  - Significant drop in conversion rate on specific days/periods (e.g., May 23-25, weekends), contributing to the overall monthly decline and indicating potential issues with targeting or site performance em certos momentos.
+  - High daily ROI volatility with several days showing very low return (ex: May 5th ROI 1.14, May 11th ROI 1.41) despite consistent spend levels, suggesting inefficiency on specific days.
+
+Oportunidades_Analiticas:
+  - Ticket Médio em alta histórica (R$ 513.42 em Maio vs. R$ 486.03 em Abril e R$ 463.97 YoY), indicando potencial para focar em produtos/segmentos de maior valor ou estratégias de upselling/cross-selling.
+  - Analisar dias de alta performance (ex: 15/05 com ROI 6.10, 19/05 com 31 conversões) para identificar e replicar fatores de sucesso (campanhas, produtos, horários) que geraram picos de receita e conversão.
+#

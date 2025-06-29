@@ -1,0 +1,13 @@
+Tendencias:
+  ROI_Recente: Piorando - Abril apresentou o menor ROI dos últimos 5 meses, com queda significativa MoM e YoY.
+  Receita_Recente: Piorando - A receita de Abril foi a menor dos últimos 5 meses, com redução MoM apesar do aumento YoY.
+  Taxa_Conversao_Recente: Piorando - A taxa de conversão de Abril foi a menor dos últimos 5 meses, indicando menor eficiência na transformação de sessões em vendas.
+
+Alertas_Analiticos:
+  - Alerta 1: Queda acentuada de performance na segunda quinzena de Abril, com vários dias apresentando ROI negativo ou muito baixo (ex: 13, 18, 19 de Abril), impactando fortemente o resultado mensal.
+  - Alerta 2: O aumento do Ticket Médio observado em Abril (e tendência de alta nos últimos meses) não foi suficiente para compensar a queda no volume de conversões e na taxa de conversão, resultando em receita e ROI menores.
+
+Oportunidades_Analiticas:
+  - Oportunidade 1: Analisar os dias/períodos de alta performance no início do mês (ex: 1-4, 9 de Abril) para identificar padrões de campanhas, audiências ou criativos que geraram melhor ROI e replicá-los.
+  - Oportunidade 2: Investigar as causas da baixa performance na segunda quinzena, focando nos dias de alto investimento e baixo retorno, para otimizar ou pausar campanhas ineficientes e realocar budget.
+#
