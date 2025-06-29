@@ -1,0 +1,85 @@
+**Detailed Meta Ads Data for April 2025:**
+| Date                |   Spend |   Revenue |   Sessions |   Conversions |
+|:--------------------|--------:|----------:|-----------:|--------------:|
+| 2025-04-01 00:00:00 |  978.2  |   2597.15 |       3468 |             6 |
+| 2025-04-02 00:00:00 |  766.47 |   2762.39 |       2911 |             8 |
+| 2025-04-03 00:00:00 |  707.37 |   1397.26 |       1758 |             7 |
+| 2025-04-04 00:00:00 |  642.27 |   1521.38 |       2901 |             3 |
+| 2025-04-05 00:00:00 |  591.93 |   3964.56 |       3127 |            10 |
+| 2025-04-06 00:00:00 |  731.22 |   2860.93 |       3999 |             8 |
+| 2025-04-07 00:00:00 |  714.83 |   1916.96 |       3206 |             6 |
+| 2025-04-08 00:00:00 |  639.23 |   1993.22 |       3251 |             6 |
+| 2025-04-09 00:00:00 |  709.94 |   1023.28 |       2168 |             4 |
+| 2025-04-10 00:00:00 |  589.05 |   1799.45 |       1323 |             8 |
+| 2025-04-11 00:00:00 |  535.56 |    850.72 |       1227 |             3 |
+| 2025-04-12 00:00:00 |  533.26 |    689.27 |       1475 |             3 |
+| 2025-04-13 00:00:00 |  640.46 |   2104.76 |       2045 |             5 |
+| 2025-04-14 00:00:00 |  544.74 |   1383.57 |       1690 |             5 |
+| 2025-04-15 00:00:00 |  441.1  |    619.31 |       1236 |             3 |
+| 2025-04-16 00:00:00 |  337.42 |    554.1  |        842 |             2 |
+| 2025-04-17 00:00:00 |  295.95 |   2153.4  |        772 |             7 |
+| 2025-04-18 00:00:00 |  299.4  |    969.31 |       1006 |             4 |
+| 2025-04-19 00:00:00 |  271.1  |    531.25 |       1007 |             2 |
+| 2025-04-20 00:00:00 |  326.38 |   1805.52 |       1269 |             4 |
+| 2025-04-21 00:00:00 |  319.04 |    954.06 |       1237 |             3 |
+| 2025-04-22 00:00:00 |  310.7  |   1493.3  |       1089 |             2 |
+| 2025-04-23 00:00:00 |  487.22 |    782.41 |       1530 |             2 |
+| 2025-04-24 00:00:00 |  590.52 |   2497.8  |       1441 |             8 |
+| 2025-04-25 00:00:00 |  555.4  |   3991.35 |       1831 |             8 |
+| 2025-04-26 00:00:00 |  475.38 |   1147.33 |       1723 |             5 |
+| 2025-04-27 00:00:00 |  622.79 |   3107.85 |       2431 |             9 |
+| 2025-04-28 00:00:00 |  748.74 |   2168.55 |       2411 |             7 |
+| 2025-04-29 00:00:00 |  740.15 |   1400.58 |       2320 |             3 |
+| 2025-04-30 00:00:00 |  670.5  |   1451.74 |       1876 |             7 |
+
+**Comparative Meta Ads Previous Month (March 2025):**
+- Spend (Total): R$ 36,956.23
+- Revenue (Total): R$ 113,750.16
+- Sessions (Total): 105,060
+- Conversions (Total): 277
+- ROI (Calculated): 3.08
+- CPS (Cost Per Session): R$ 0.35
+- TKM (Ticket Médio): R$ 410.65
+- Conversion Rate: 0.26%
+
+**Comparative Meta Ads Same Month Previous Year (April 2024):**
+- Spend (Total): R$ 8,602.30
+- Revenue (Total): R$ 22,189.26
+- Sessions (Total): 32,193
+- Conversions (Total): 85
+- ROI (Calculated): 2.58
+- CPS (Cost Per Session): R$ 0.27
+- TKM (Ticket Médio): R$ 261.05
+- Conversion Rate: 0.26%
+
+**Consolidated Meta Ads Summary for Last 4 Months (prior to April 2025):**
+**Meta Ads - Month of February 2025:**
+- Spend (Total): R$ 27,907.94
+- Revenue (Total): R$ 85,089.89
+- Sessions (Total): 59,514
+- Conversions (Total): 247
+- ROI (Calculated): 3.05
+- CPS (Cost Per Session): R$ 0.47
+- TKM (Ticket Médio): R$ 344.49
+- Conversion Rate: 0.42%
+
+**Meta Ads - Month of January 2025:**
+- Spend (Total): R$ 60,826.96
+- Revenue (Total): R$ 183,724.88
+- Sessions (Total): 121,365
+- Conversions (Total): 620
+- ROI (Calculated): 3.02
+- CPS (Cost Per Session): R$ 0.50
+- TKM (Ticket Médio): R$ 296.33
+- Conversion Rate: 0.51%
+
+**Meta Ads - Month of December 2024:**
+- Spend (Total): R$ 56,964.77
+- Revenue (Total): R$ 255,613.19
+- Sessions (Total): 149,184
+- Conversions (Total): 839
+- ROI (Calculated): 4.49
+- CPS (Cost Per Session): R$ 0.38
+- TKM (Ticket Médio): R$ 304.66
+- Conversion Rate: 0.56%
+

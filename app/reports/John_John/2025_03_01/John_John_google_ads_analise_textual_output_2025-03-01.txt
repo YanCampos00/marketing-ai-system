@@ -1,0 +1,13 @@
+Tendencias:
+  ROI_Recente: Piorando - O ROI de Março (2.77) foi o mais baixo dos últimos 5 meses e inferior ao mesmo período do ano anterior (3.13).
+  Receita_Recente: Volátil - Houve aumento MoM (+30%) e YoY (+39%), mas a receita ainda está abaixo dos picos de Nov/Dez 2024, mostrando flutuações recentes.
+  Taxa_Conversao_Recente: Piorando - A taxa de conversão (0.55%) caiu significativamente MoM (de 0.70%) e está abaixo da média dos últimos meses, apesar da melhora YoY.
+
+Alertas_Analiticos:
+  - A queda acentuada na Taxa de Conversão em Março, especialmente em dias específicos (ex: 03/03, 09/03), sugere problemas pontuais na qualidade do tráfego ou na experiência do usuário no site, impactando a eficiência geral.
+  - Dias com alto investimento (ex: 12/03, 31/03) apresentaram ROI desproporcionalmente baixo, indicando ineficiência na alocação de budget ou performance aquém do esperado ao escalar campanhas.
+
+Oportunidades_Analiticas:
+  - Analisar os dias de alta performance (ex: 07/03, 18/03, 23/03, 27/03) que tiveram ROI e/ou Taxa de Conversão excelentes para identificar padrões de campanhas, públicos ou criativos que podem ser replicados e escalados.
+  - O Ticket Médio implícito em Março (~R$ 497) foi significativamente maior que nos meses comparativos. Explorar estratégias para capitalizar esse comportamento de compra de maior valor.
+#

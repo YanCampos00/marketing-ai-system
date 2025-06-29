@@ -1,0 +1,13 @@
+Tendencias:
+  ROI_Recente: Piorando - O ROI caiu significativamente MoM (3.05 para 2.22) e em relação à média dos últimos 4 meses, apesar do aumento de receita.
+  Receita_Recente: Melhorando - A receita total aumentou MoM (R$ 85k para R$ 118k) e YoY (R$ 42k para R$ 118k), impulsionada pelo maior investimento e volume de sessões.
+  Taxa_Conversao_Recente: Piorando - A taxa de conversão diminuiu MoM (0.42% para 0.32%) e em relação à média dos últimos 4 meses, indicando menor eficiência na conversão de sessões em vendas.
+
+Alertas_Analiticos:
+  - Alerta 1: Extrema volatilidade diária de ROI e Taxa de Conversão, com dias de performance muito baixa (ROI < 1.5, CR < 0.2%) que impactam a média mensal e mascaram ineficiências pontuais.
+  - Alerta 2: Ocorrência de dias com alto volume de sessões mas conversões e ROI extremamente baixos (ex: 2, 11, 13, 22, 24, 30 de Março), sugerindo possíveis problemas de qualidade de tráfego, site ou tracking em datas específicas.
+
+Oportunidades_Analiticas:
+  - Oportunidade 1: Identificação de um padrão de alta performance (alto ROI e Receita) em fins de semana, especialmente domingos (ex: 3, 9, 16, 23 de Março), indicando potencial para otimizar a alocação de budget ou estratégias para esses dias.
+  - Oportunidade 2: Investigar as causas raiz da baixa performance nos dias críticos identificados (Alerta 2) para corrigir problemas e reduzir desperdício de investimento, melhorando a consistência do ROI.
+#

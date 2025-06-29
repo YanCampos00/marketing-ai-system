@@ -1,0 +1,13 @@
+Tendencias:
+  ROI_Recente: Piorando - Queda acentuada em Abril (1.86) comparado a Março (3.08) e à média dos últimos 4 meses (acima de 3.0x, exceto pico de Dezembro).
+  Receita_Recente: Piorando - Queda significativa MoM (-55.9%) e em relação à média dos últimos meses, apesar do crescimento robusto YoY (+126%).
+  Taxa_Conversao_Recente: Estável - Mantida em 0.27% em Abril, similar a Março (0.26%) e Abril 2024 (0.26%), mas em patamar inferior aos meses anteriores a Março.
+
+Alertas_Analiticos:
+  - Queda drástica de performance e investimento no meio do mês (aprox. 09/04 a 23/04), com muitos dias apresentando ROI abaixo de 2.0x, impactando o resultado mensal agregado.
+  - Redução significativa do Ticket Médio (TKM) MoM (R$ 305.57 vs R$ 410.65), sugerindo mudança no mix de produtos vendidos ou comportamento de compra via Meta Ads.
+
+Oportunidades_Analiticas:
+  - Analisar e replicar as estratégias (criativos, públicos, ofertas) que geraram picos de alta performance e ROI (acima de 4.0x) em dias específicos, especialmente na última semana de Abril (24/04 a 27/04).
+  - Investigar a causa da queda do TKM para entender se é uma tendência de mercado, sazonalidade ou resultado de campanhas específicas, buscando otimizar para maior valor por conversão.
+#
