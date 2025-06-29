@@ -1,0 +1,27 @@
+
+# Relatório Consolidado de Performance de Mídia
+
+**Cliente:** {client_name}
+**Mês de Análise:** {mes_analise}
+
+## Resumo Executivo
+
+Com base nas análises individuais das plataformas a seguir, forneça um resumo executivo conciso da performance geral de marketing no período. Destaque os principais sucessos, os maiores desafios e forneça recomendações estratégicas claras e acionáveis para o próximo mês.
+
+---
+
+### Análise Detalhada do Google Ads
+
+{google_ads_report}
+
+---
+
+### Análise Detalhada do Meta Ads
+
+{meta_ads_report}
+
+---
+
+## Conclusão e Próximos Passos
+
+Sintetize os aprendizados de ambas as plataformas e delineie um plano de ação claro. As recomendações devem ser priorizadas com base no impacto esperado no resultado do cliente.
