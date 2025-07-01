@@ -1,6 +1,5 @@
 import google.generativeai as genai
-import os
-from app.config.config_loader import load_config
+from app.config.settings import settings # Importar settings
 
 class LLMService:
     """
@@ -38,14 +37,9 @@ class LLMService:
 def get_llm_service():
     """
     Função factory para criar uma instância do LLMService
-    com base na configuração global.
+    lendo a configuração das configurações centralizadas.
     """
-    config = load_config('app/config/global_config.json')
-    provider = config.get('llm_provider', 'google')
-    api_key_env = config.get('google_api_key_env')
-    
-    api_key = os.getenv(api_key_env)
-    if not api_key:
-        raise ValueError(f"A variável de ambiente '{api_key_env}' não está definida.")
+    provider = settings.LLM_PROVIDER
+    api_key = settings.GOOGLE_API_KEY
         
     return LLMService(provider=provider, api_key=api_key)

@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine, Column, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import os
+from app.config.settings import settings # Importar settings
 
-# Define o caminho para o banco de dados SQLite a partir de uma variável de ambiente, com um padrão
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./app/db/clients.db")
+# Define o caminho para o banco de dados a partir das configurações centralizadas
+DATABASE_URL = settings.DATABASE_URL
 
 # Cria o motor do banco de dados
 engine = create_engine(

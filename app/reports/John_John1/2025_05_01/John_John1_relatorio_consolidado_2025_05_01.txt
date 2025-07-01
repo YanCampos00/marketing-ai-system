@@ -1,0 +1,37 @@
+##Relatório Consolidado de Performance de Marketing Digital - John John1 - Maio/2025
+
+##Resumo Executivo e Insights Estratégicos
+
+Maio de 2025 apresentou um desempenho preocupante para as campanhas de marketing digital da John John1, com queda significativa no ROI tanto no Google Ads quanto no Meta Ads, apesar de um aumento considerável nos gastos em ambas as plataformas.  A receita apresentou queda tanto mês a mês (MoM) quanto ano a ano (YoY) em ambas plataformas, indicando problemas na conversão e ineficiência no investimento.  A análise demonstra a necessidade urgente de revisão estratégica para otimizar o retorno e evitar maiores prejuízos.
+
+As principais tendências negativas incluem o aumento de gastos sem o correspondente aumento de receita, baixa performance de conversão e queda significativa no ROI.  Os alertas indicam problemas com a segmentação, criativos e, possivelmente, a própria oferta.  É fundamental investigar a causa raiz desses problemas para reverter a situação.
+
+Para o próximo mês, é crucial focar em otimizar a performance das campanhas existentes, realizando testes A/B com novos criativos e segmentações, e analisar profundamente os dados dos últimos meses para identificar padrões de comportamento e melhorar a eficiência do investimento.  A análise precisa considerar a interação entre as plataformas para garantir a melhor estratégia e evitar a duplicação de esforços.
+
+
+##Dados Consolidados e Comparativos (Conforme tabela apresentada na questão)
+
+
+##Análises Detalhadas por Plataforma (Conforme análise detalhada de Google Ads e Meta Ads apresentada na questão)
+
+
+##Conclusão e Próximos Passos
+
+O desempenho negativo em maio exige uma ação imediata e integrada.  As principais ações para junho incluem:
+
+**Prioridade Alta:**
+
+1. **Análise aprofundada de dados:** Realizar uma análise completa dos dados dos últimos quatro meses em ambas as plataformas, focando na segmentação, performance dos criativos e comportamento do público-alvo.  Identificar padrões que expliquem a queda na receita e no ROI.
+2. **Teste A/B de criativos e segmentações:** Implementar testes A/B em ambas as plataformas com foco em diferentes segmentações (priorizando o público-alvo jovem, urbano e rocker), mensagens e formatos de anúncio, para identificar o que gera maior conversão.
+3. **Revisão da estratégia de oferta:** Analisar se a oferta atual é atrativa o suficiente para o público-alvo e se está alinhada com as mensagens e segmentação das campanhas.
+
+**Prioridade Média:**
+
+4. **Exploração de novos formatos de anúncio:** Testar novos formatos de anúncio em ambas as plataformas para identificar oportunidades de alcançar o público de forma mais eficaz.
+5. **Otimização de palavras-chave (Google Ads):** Revisar as palavras-chave utilizadas no Google Ads para garantir que estejam alinhadas com a estratégia e o público-alvo, maximizando o alcance e a relevância.
+
+**Prioridade Baixa (após a implementação das ações de alta e média prioridade):**
+
+6. **Exploração de novas plataformas:**  Considerar a inclusão de outras plataformas de marketing digital, após a otimização das campanhas atuais, para diversificar os canais e ampliar o alcance.
+
+A integração entre as plataformas é crucial.  A análise conjunta dos dados permitirá identificar sinergias e otimizar os esforços, evitando duplicação de investimento e maximizando o retorno.  Um relatório de acompanhamento deverá ser apresentado no início de julho para avaliar a eficácia das ações implementadas e ajustar a estratégia, se necessário.

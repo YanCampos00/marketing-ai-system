@@ -1,20 +1,17 @@
 from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import List, Optional, Dict
 from datetime import date
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import os
-from dotenv import load_dotenv
-
-# Carregar variáveis de ambiente
-load_dotenv()
-
+import re # Importar re para validação
+from app.config.settings import settings # Importar settings
+from app.utils.file_utils import get_report_path # Importar get_report_path
 from app.agents.orchestrator import Orchestrator, get_orchestrator
 from app.db.database import get_db, engine, Base, ClientDB, PromptDB
 from app.middleware import add_exception_handlers
-# from app.agents.media_agent import METRICAS_DISPONIVEIS # Removido
 
 # Cria as tabelas no banco de dados (se não existirem)
 Base.metadata.create_all(bind=engine)
@@ -48,6 +45,13 @@ class ClientBase(BaseModel):
 
 class ClientCreate(ClientBase):
     id: str
+
+    @field_validator('id')
+    def validate_client_id(cls, v):
+        """Valida se o ID do cliente contém apenas letras, números e underscores."""
+        if not re.match(r'^[a-zA-Z0-9_]+$', v):
+            raise ValueError('O ID do cliente deve conter apenas letras, números e underscores (_).')
+        return v
 
 class ClientUpdate(ClientBase):
     nome_exibicao: Optional[str] = None
@@ -101,13 +105,16 @@ async def startup_event():
 async def read_root():
     return {"message": "Welcome to the Marketing AI System v1! Visit /docs for API documentation."}
 
+from app.agents.media_agent import MediaAgent # Importar MediaAgent
+
 @app.get("/metrics")
 async def get_available_metrics():
-    # Lista estática de métricas. Idealmente, isso viria do MediaAgent de forma dinâmica.
-    return sorted([
-        "Spend", "Revenue", "Sessions", "Conversions", "Clicks", "Impressions",
-        "ROI", "CPS", "TKM", "Conversion_Rate", "CPC", "CPM"
-    ])
+    orchestrator: Orchestrator = app.state.orchestrator
+    # Acessa as métricas disponíveis diretamente do MediaAgent
+    available_metrics = list(orchestrator.media_agent.METRICAS_DISPONIVEIS.keys())
+    # Adiciona métricas base que podem não estar no METRICAS_DISPONIVEIS mas são usadas
+    available_metrics.extend(["Spend", "Revenue", "Sessions", "Conversions", "Clicks", "Impressions"])
+    return sorted(list(set(available_metrics))) # Retorna uma lista única e ordenada
 
 @app.get("/clients", response_model=Dict[str, ClientInDB])
 async def get_clients(db: Session = Depends(get_db)):
@@ -213,46 +220,45 @@ async def run_analysis(request: AnalysisRequest, db: Session = Depends(get_db)):
 @app.get("/reports/list", response_model=List[ReportSummary])
 async def list_reports(db: Session = Depends(get_db)):
     reports_list = []
-    reports_base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'reports')
-
     clients_db = db.query(ClientDB).all()
-    client_map = {client.id: client.nome_exibicao for client in clients_db}
     
-    if not os.path.exists(reports_base_dir):
-        return []
+    for client_db_entry in clients_db:
+        client_name = client_db_entry.nome_exibicao
+        safe_client_name = "".join(c if c.isalnum() else "_" for c in client_name)
+        client_id = client_db_entry.id
 
-    for client_dir_name in os.listdir(reports_base_dir):
-        client_dir_path = os.path.join(reports_base_dir, client_dir_name)
-        if os.path.isdir(client_dir_path):
-            # Tenta encontrar o client_id correspondente ao safe_client_name
-            found_client_id = None
-            original_client_name = None
-            for client_db_entry in clients_db:
-                generated_safe_name = "".join(c if c.isalnum() else "_" for c in client_db_entry.nome_exibicao)
-                if generated_safe_name == client_dir_name:
-                    found_client_id = client_db_entry.id
-                    original_client_name = client_db_entry.nome_exibicao
-                    break
-            
-            if not found_client_id:
-                continue # Pula diretórios que não correspondem a um cliente conhecido
+        # Listar diretórios de meses para este cliente
+        reports_base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'reports')
+        client_reports_root = os.path.join(reports_base_dir, safe_client_name)
 
-            for month_dir_name in os.listdir(client_dir_path):
-                month_dir_path = os.path.join(client_dir_path, month_dir_name)
-                if os.path.isdir(month_dir_path):
-                    mes_analise_formatted = month_dir_name.replace("_", "-") # Converte para YYYY-MM-DD
+        if not os.path.exists(client_reports_root):
+            continue
 
-                    report_file_pattern = f"{client_dir_name}_relatorio_consolidado_{month_dir_name}.txt"
-                    
-                    for file_name in os.listdir(month_dir_path):
-                        if file_name == report_file_pattern:
-                            reports_list.append(ReportSummary(
-                                client_id=found_client_id,
-                                client_name=original_client_name,
-                                mes_analise=mes_analise_formatted,
-                                file_name=file_name,
-                                file_path=os.path.join(client_dir_name, month_dir_name, file_name) # Caminho relativo
-                            ))
+        for month_dir_name in os.listdir(client_reports_root):
+            month_dir_path = os.path.join(client_reports_root, month_dir_name)
+            if os.path.isdir(month_dir_path):
+                mes_analise_formatted = month_dir_name.replace("_", "-") # Converte para YYYY-MM-DD
+
+                # Usar get_report_path para obter o caminho absoluto do relatório consolidado
+                # e então extrair o caminho relativo para o frontend
+                try:
+                    absolute_report_path = get_report_path(client_name, mes_analise_formatted, file_type="consolidated")
+                    # Extrair o nome do arquivo do caminho absoluto
+                    file_name = os.path.basename(absolute_report_path)
+                    # Construir o caminho relativo esperado pelo frontend
+                    relative_file_path = os.path.join(safe_client_name, month_dir_name, file_name)
+
+                    if os.path.exists(absolute_report_path):
+                        reports_list.append(ReportSummary(
+                            client_id=client_id,
+                            client_name=client_name,
+                            mes_analise=mes_analise_formatted,
+                            file_name=file_name,
+                            file_path=relative_file_path
+                        ))
+                except ValueError:
+                    # Ignorar tipos de arquivo desconhecidos ou erros de caminho
+                    continue
     return reports_list
 
 @app.get("/reports/view/{file_name}", response_model=ReportContent)
@@ -281,17 +287,8 @@ async def get_report_content(client_id: str, mes_analise: str, db: Session = Dep
         raise HTTPException(status_code=404, detail=f"Cliente com ID '{client_id}' não encontrado.")
     
     original_client_name = client_db_entry.nome_exibicao
-    safe_client_name = "".join(c if c.isalnum() else "_" for c in original_client_name)
     
-    safe_mes_analise = mes_analise.replace("-", "_") # Converte para YYYY_MM_DD para o caminho do arquivo
-
-    reports_base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'reports')
-    report_file_path = os.path.join(
-        reports_base_dir,
-        safe_client_name,
-        safe_mes_analise,
-        f"{safe_client_name}_relatorio_consolidado_{safe_mes_analise}.txt"
-    )
+    report_file_path = get_report_path(original_client_name, mes_analise, file_type="consolidated")
 
     if not os.path.exists(report_file_path):
         raise HTTPException(status_code=404, detail="Relatório não encontrado.")
@@ -305,5 +302,5 @@ async def get_report_content(client_id: str, mes_analise: str, db: Session = Dep
 
 # --- Bloco de Execução ---
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
+    port = settings.PORT
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False) # 'reload=True' pode causar problemas no Windows

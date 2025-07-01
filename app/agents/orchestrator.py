@@ -8,9 +8,8 @@ from app.utils.data_formatters import formatar_markdown_consolidado
 from app.utils.prompt_loader import load_prompt
 from app.agents.media_agent import MediaAgent
 from app.core.llm_service import get_llm_service
-from app.utils.file_utils import save_to_file, create_directory_if_not_exists
-
-PASTA_RELATORIOS_BASE = "reports"
+from app.utils.file_utils import save_to_file, get_report_path # Importar get_report_path
+from app.core.connectors.google_sheets_connector import GoogleSheetsConnector
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -22,8 +21,10 @@ class Orchestrator:
     """
     def __init__(self, llm_service):
         self.llm_service = llm_service
-        # Inicializa os agentes especializados
-        self.media_agent = MediaAgent(llm_service)
+        # Define o conector de dados a ser usado. No futuro, isso pode ser dinâmico.
+        data_connector = GoogleSheetsConnector()
+        # Inicializa os agentes especializados com o conector injetado
+        self.media_agent = MediaAgent(llm_service, data_connector=data_connector)
 
     def executar_fluxo_analise_cliente(self, cliente_config: dict, mes_analise_atual_str: str, metricas_selecionadas: list):
         """
@@ -118,13 +119,7 @@ class Orchestrator:
             traceback.print_exc()
 
         # Salvar o relatório final
-        safe_client_name = "".join(c if c.isalnum() else "_" for c in client_name)
-        safe_mes_analise = mes_analise_atual_str.replace("-", "_")
-        reports_base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', PASTA_RELATORIOS_BASE)
-        client_report_dir = os.path.join(reports_base_dir, safe_client_name, safe_mes_analise)
-        create_directory_if_not_exists(client_report_dir)
-        file_name = f"{safe_client_name}_relatorio_consolidado_{safe_mes_analise}.txt"
-        file_path = os.path.join(client_report_dir, file_name)
+        file_path = get_report_path(client_name, mes_analise_atual_str, file_type="consolidated")
 
         try:
             save_to_file(file_path, final_report)

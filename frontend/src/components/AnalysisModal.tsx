@@ -146,7 +146,7 @@ const AnalysisModal: React.FC<AnalysisModalProps> = ({ show, handleClose, client
           Cancelar
         </Button>
         <Button
-          style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+          className="btn-cta"
           onClick={handleSubmit}
           disabled={loading}
         >

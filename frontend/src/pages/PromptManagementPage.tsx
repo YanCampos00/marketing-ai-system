@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Card, Button, Spinner, Alert, Modal, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import api from '../services/api';
-import * as Types from '../types';
 import { toast } from 'react-toastify';
+import { usePrompt } from '../context/PromptContext'; // Importa o hook usePrompt
 
 interface Prompt {
   id: string;
@@ -13,30 +12,11 @@ interface Prompt {
 }
 
 const PromptManagementPage: React.FC = () => {
-  const [prompts, setPrompts] = useState<Prompt[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { prompts, loading, error, updatePrompt } = usePrompt(); // Usa o contexto
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
   const [editedContent, setEditedContent] = useState<string>('');
   const [editedDescription, setEditedDescription] = useState<string>('');
-
-  const fetchPrompts = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get<Prompt[]>('/prompts');
-      setPrompts(response.data);
-    } catch (err) {
-      setError('Erro ao carregar prompts.');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPrompts();
-  }, []);
 
   const handleEditClick = (prompt: Prompt) => {
     setSelectedPrompt(prompt);
@@ -56,17 +36,14 @@ const PromptManagementPage: React.FC = () => {
     if (!selectedPrompt) return;
 
     try {
-      await api.put(`/prompts/${selectedPrompt.nome}`, {
+      await updatePrompt(selectedPrompt.nome, {
         nome: selectedPrompt.nome,
         conteudo: editedContent,
         descricao: editedDescription,
       });
-      toast.success('Prompt atualizado com sucesso!');
-      fetchPrompts(); // Recarregar prompts após a atualização
       handleCloseEditModal();
     } catch (err: any) {
-      toast.error(`Erro ao atualizar prompt: ${err.response?.data?.detail || err.message}`);
-      console.error(err);
+      // Erro já tratado no contexto, mas pode-se adicionar lógica extra aqui se necessário
     }
   };
 
@@ -82,7 +59,7 @@ const PromptManagementPage: React.FC = () => {
     <Container className="mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="mb-0 text-white">Gerenciamento de Prompts</h1>
-        <Link to="/" className="btn btn-warning" style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}>Voltar para Home</Link>
+        <Link to="/" className="btn btn-cta">Voltar para Home</Link>
       </div>
       <Row>
         {prompts.length === 0 ? (
@@ -99,7 +76,7 @@ const PromptManagementPage: React.FC = () => {
                   </Card.Text>
                   <Button 
                     variant="primary" 
-                    style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+                    className="btn-cta"
                     onClick={() => handleEditClick(prompt)}
                   >
                     Editar
@@ -145,7 +122,7 @@ const PromptManagementPage: React.FC = () => {
           </Button>
           <Button 
             variant="primary" 
-            style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+            className="btn-cta"
             onClick={handleSavePrompt}
           >
             Salvar Alterações

@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import api from '../services/api';
-import * as Types from '../types'; // Importa tudo como Types
+import * as Types from '../types';
 import { toast } from 'react-toastify';
+import { useClient } from '../context/ClientContext'; // Importa o hook useClient
 
 interface EditClientModalProps {
   show: boolean;
   handleClose: () => void;
   client: Types.Client | null; // Cliente a ser editado
-  onClientUpdated: () => void; // Callback para atualizar a lista de clientes
+  // onClientUpdated: () => void; // Removido, pois o contexto cuida da atualização
 }
 
-const EditClientModal: React.FC<EditClientModalProps> = ({ show, handleClose, client, onClientUpdated }) => {
+const EditClientModal: React.FC<EditClientModalProps> = ({ show, handleClose, client }) => {
+  const { updateClient } = useClient(); // Obtém a função updateClient do contexto
   const [clientData, setClientData] = useState<Partial<Types.Client>>({});
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -34,13 +35,11 @@ const EditClientModal: React.FC<EditClientModalProps> = ({ show, handleClose, cl
 
     setLoading(true);
     try {
-      await api.put(`/clients/${client.id}`, clientData);
-      toast.success('Cliente atualizado com sucesso!');
-      onClientUpdated();
+      // Chama a função updateClient do contexto
+      await updateClient(client.id, clientData);
       handleClose();
     } catch (error: any) {
-      console.error('Erro ao atualizar cliente:', error);
-      toast.error(`Erro ao atualizar cliente: ${error.response?.data?.detail || error.message}`);
+      // Erro já tratado no contexto, mas pode-se adicionar lógica extra aqui se necessário
     } finally {
       setLoading(false);
     }
@@ -82,7 +81,7 @@ const EditClientModal: React.FC<EditClientModalProps> = ({ show, handleClose, cl
           Cancelar
         </Button>
         <Button
-          style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+          className="btn-cta"
           onClick={handleSubmit}
           disabled={loading}
         >
