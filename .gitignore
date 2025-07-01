@@ -52,3 +52,6 @@ dist-ssr/
 *.sqlite3
 *.db
 clients.db
+
+# Credentials
+app/config/credenciais.json
