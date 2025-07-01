@@ -78,9 +78,14 @@ class Orchestrator:
             # 3. Consolidação e Relatório Final
             consolidated_prompt_template = load_prompt('consolidated_report')
 
-            # Extrair relatórios textuais
-            google_ads_report_text = google_results.get('report', 'N/A')
-            meta_ads_report_text = meta_results.get('report', 'N/A')
+            # Extrair relatórios textuais e consolidá-los
+            all_platforms_reports_text = []
+            if google_results and google_results.get('report'):
+                all_platforms_reports_text.append(f"### Análise Detalhada do Google Ads\n\n{google_results['report']}")
+            if meta_results and meta_results.get('report'):
+                all_platforms_reports_text.append(f"### Análise Detalhada do Meta Ads\n\n{meta_results['report']}")
+            
+            all_platforms_reports_markdown = "\n\n".join(all_platforms_reports_text) if all_platforms_reports_text else "Nenhuma análise de plataforma disponível."
 
             # Consolidar KPIs
             kpis_data = {
@@ -102,10 +107,9 @@ class Orchestrator:
             prompt = consolidated_prompt_template.format(
                 client_name=client_name,
                 mes_analise=datetime.strptime(mes_analise_atual_str, "%Y-%m-%d").strftime('%B de %Y'),
-                google_ads_report=google_ads_report_text,
-                meta_ads_report=meta_ads_report_text,
                 kpis_consolidated_markdown=kpis_markdown,
-                comparatives_consolidated_markdown=comparatives_markdown
+                comparatives_consolidates_markdown=comparatives_markdown, # Nome do placeholder atualizado
+                all_platforms_reports=all_platforms_reports_markdown
             )
 
             final_report = self.llm_service.generate_text(prompt)
