@@ -4,4 +4,8 @@ gspread
 oauth2client
 google-generativeai
 python-dotenv
+pandas
+python-dateutil
+tenacity
 SQLAlchemy
+tabulate

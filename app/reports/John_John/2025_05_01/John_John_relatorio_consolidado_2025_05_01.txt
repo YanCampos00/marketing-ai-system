@@ -1,39 +1,40 @@
-Cliente: Marca com lifestyle jovem, urbano e rocker, referência em jeans com design diferenciado e um mix completo de roupas e acessórios femininos e masculinos. Foco em autenticidade, atitude e presença em festas e festivais.
-Periodo: May de 2025
+## Resumo Executivo: Performance de Marketing da John John - Maio de 2025
 
-Destaques_Per_Plataforma:
-  Google_Ads:
-    Principal_KPI: ROI
-    Alertas_Analiticos_Chave:
-      - Volatilidade diária acentuada com dias de performance muito abaixo da média.
-      - Aumento do Custo por Conversão (CPC) impactando a rentabilidade.
-    Oportunidades_Analiticas_Chave:
-      - Análise dos picos de performance para identificar fatores de sucesso e replicar.
-      - Explorar estratégias para capitalizar a tendência positiva do Ticket Médio (TKM).
-    Tendencia_Impactante: Piorando - Declínio constante do ROI e Taxa de Conversão nos últimos meses.
-  Meta_Ads:
-    Principal_KPI: ROI
-    Alertas_Analiticos_Chave:
-      - ROI geral de maio criticamente baixo impulsionado por alta frequência de dias com performance ruim/negativa.
-      - Queda acentuada e inconsistência diária na taxa de conversão, indicando problemas na qualidade do tráfego ou experiência pós-clique em períodos específicos.
-    Oportunidades_Analiticas_Chave:
-      - Analisar dias de alta performance para identificar padrões de sucesso (criativos, segmentação, horários).
-      - Investigar a jornada do usuário e a experiência no site nos dias de alto volume de sessões mas baixa conversão.
-    Tendencia_Impactante: Piorando - Queda drástica no ROI, Receita e Taxa de Conversão comparado a meses anteriores e YoY.
+Maio de 2025 apresentou uma performance de marketing abaixo do esperado para a John John, com queda significativa no ROI tanto no Google Ads quanto no Meta Ads, apesar do aumento de investimento em ambas as plataformas.  Enquanto o Google Ads apresentou um ROI de 2.68, com queda de 18.2% MoM e 4.67% YoY, o Meta Ads teve um ROI de 2.41, caindo 22.85% MoM e 21.75% YoY.  A receita também sofreu quedas, indicando problemas de eficiência em ambas as estratégias.  A análise sugere problemas de segmentação, otimização de lances e criativos pouco eficazes como principais causas.  É crucial uma reavaliação imediata das estratégias e alocação de recursos para recuperar a performance e atingir os objetivos de receita.
 
-Analise_Consolidada:
-  Comparativo_e_Sinergias: Ambas as plataformas apresentaram tendência de piora consistente em métricas-chave como ROI, Receita e Taxa de Conversão, com destaque para a queda acentuada em maio. Um ponto comum crítico é a alta volatilidade diária e a ocorrência frequente de dias com performance muito baixa ou negativa, impactando o resultado agregado do mês. O aumento do custo por conversão/aquisição é um fator relevante em ambas as plataformas.
-  Diagnostico_Principal: O principal desafio do período foi a queda significativa na eficiência de conversão e rentabilidade (ROI) em ambas as plataformas, amplificada pela inconsistência diária e a dificuldade em manter uma performance positiva de forma contínua.
+## Conclusão e Próximos Passos:
 
-Recomendacoes_Estrategicas:
-  Google_Ads:
-    - Realizar análise aprofundada dos dias de pico de performance para isolar variáveis de sucesso (campanha, criativo, audiência, horário, promoção) e aplicar learnings.
-    - Revisar segmentações e lances para mitigar o aumento do CPC e melhorar a eficiência na aquisição de conversões rentáveis.
-  Meta_Ads:
-    - Conduzir uma análise granular dos dias de baixa performance e alta sessão/baixa conversão para identificar gargalos na jornada pós-clique ou qualidade do tráfego em dias específicos.
-    - Testar e escalar os padrões identificados nos dias de alta performance (criativos, segmentação, abordagens).
-  Cross_Plataforma:
-    - Desenvolver um plano de ação para mitigar a volatilidade diária e reduzir a frequência de dias com performance negativa.
-    - Alinhar insights de performance positiva (ex: quais tipos de criativos ou ofertas performam melhor nos picos) e negativa (ex: problemas de site/jornada) entre as equipes de plataforma.
+**Principais Descobertas:**
 
-Ponto_Critico_Unico: A performance de mídia paga em maio foi criticamente impactada pela queda acentuada e generalizada do ROI e Taxa de Conversão em ambas as plataformas, impulsionada pela alta frequência de dias com resultados negativos ou muito baixos.
+* **Queda generalizada do ROI:**  Ambas as plataformas apresentaram uma queda significativa no ROI, indicando ineficiência nos gastos com mídia.  A queda é mais preocupante no Meta Ads, sugerindo a necessidade de uma revisão mais profunda da estratégia.
+* **Problemas de Segmentação e Otimização:** Tanto o Google Ads quanto o Meta Ads indicam problemas de segmentação e otimização de lances.  O Google Ads sofreu com alocação inadequada de orçamento em dispositivos e grupos de anúncios, enquanto o Meta Ads demonstra falhas no targeting, levando a conversões baixas.
+* **Criativos Ineficazes:**  A queda na receita, mesmo com aumento de gastos, sugere que os materiais criativos não estão ressonando com o público-alvo.  A análise apontou saturação em alguns segmentos do Google Ads e a necessidade de testar novas abordagens criativas no Meta Ads.
+* **Tendência de Queda:** A piora do ROI não é um evento isolado, com o Meta Ads demonstrando uma tendência de queda nos últimos quatro meses, requerendo uma análise mais aprofundada da estratégia histórica.
+
+
+**Plano de Ação - Junho de 2025:**
+
+**Prioridade Alta (Impacto imediato no ROI):**
+
+1. **Auditoria de Segmentação e Lances (Ambas Plataformas):** Revisão completa da segmentação em ambos os canais, focando na identificação e exclusão de segmentos improdutivos.  Otimização dos lances, com A/B testing de diferentes estratégias para identificar a mais eficaz. (Google Ads: Analisar detalhadamente a performance por dispositivo e grupo de anúncios. Meta Ads: Análise profunda da performance por Ad Sets).
+2. **Testes A/B de Criativos (Ambas Plataformas):**  Testar diferentes versões de anúncios, imagens e textos para identificar os que geram melhor engajamento e conversão.  Incluir testes com novos formatos de anúncios em ambas as plataformas.  Para o Meta Ads, explorar diferentes formatos de vídeo e a possibilidade de campanhas de vídeo "in-stream".
+3. **Análise de Funil de Conversão (Meta Ads):** Análise detalhada do funil de conversão no Meta Ads para identificar os gargalos que impedem a conversão, e otimizar a experiência do usuário em cada etapa do processo.
+
+**Prioridade Média (Impacto a médio prazo):**
+
+4. **Exploração de Novos Segmentos (Google Ads):** Investigar e explorar novos segmentos de público no Google Ads, focando em nichos identificados na análise como potenciais, mas sub-explorados.
+5. **Integração entre Plataformas:**  Analisar a possibilidade de remarketing entre Google Ads e Meta Ads, para atingir usuários que interagiram com a marca em uma plataforma, mas não converteram.
+
+**Prioridade Baixa (Monitoramento e ajustes contínuos):**
+
+6. **Monitoramento contínuo:** Monitoramento diário do desempenho das campanhas e ajustes regulares na segmentação e lances, com base nos dados coletados.
+7. **Relatórios detalhados semanais:**  Relatórios semanais mais detalhados sobre o desempenho das campanhas, para acompanhamento próximo dos resultados e ajustes mais rápidos.
+
+**Metas para Junho:**
+
+* Aumentar o ROI em ambas as plataformas em 15%.
+* Melhorar a taxa de conversão em pelo menos 10% em ambas as plataformas.
+* Identificar e implementar pelo menos 2 novos segmentos de público no Google Ads.
+
+
+Este plano de ação foca em ações rápidas para melhorar o ROI imediato, combinadas com estratégias a médio prazo para uma otimização sustentável.  O sucesso dependerá de um monitoramento constante e da capacidade de adaptação às mudanças no comportamento do público e no desempenho das campanhas.

@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
 import * as Types from '../types';
 import AnalysisModal from '../components/AnalysisModal';
 import AddClientModal from '../components/AddClientModal';
 import EditClientModal from '../components/EditClientModal';
 import DeleteClientModal from '../components/DeleteClientModal';
-import ReportViewerModal from '../components/ReportViewerModal';
 import { toast } from 'react-toastify';
 
 const HomePage: React.FC = () => {
@@ -19,11 +19,8 @@ const HomePage: React.FC = () => {
   const [showAddClientModal, setShowAddClientModal] = useState<boolean>(false);
   const [showEditClientModal, setShowEditClientModal] = useState<boolean>(false);
   const [showDeleteClientModal, setShowDeleteClientModal] = useState<boolean>(false);
-  const [showReportViewerModal, setShowReportViewerModal] = useState<boolean>(false);
-
   const [selectedClient, setSelectedClient] = useState<Types.Client | null>(null);
-  const [analysisCompletedClient, setAnalysisCompletedClient] = useState<string | null>(null);
-  const [analysisCompletedMonth, setAnalysisCompletedMonth] = useState<string | null>(null);
+  
 
   const fetchClients = useCallback(async () => {
     try {
@@ -79,17 +76,7 @@ const HomePage: React.FC = () => {
     fetchClients(); // Recarrega clientes após excluir
   };
 
-  const handleShowReportViewerModal = (clientId?: string, mesAnalise?: string) => {
-    setAnalysisCompletedClient(clientId || null);
-    setAnalysisCompletedMonth(mesAnalise || null);
-    setShowReportViewerModal(true);
-  };
-
-  const handleCloseReportViewerModal = () => {
-    setShowReportViewerModal(false);
-    setAnalysisCompletedClient(null);
-    setAnalysisCompletedMonth(null);
-  };
+  
 
   const handleAnalysisStart = () => {
     setIsAnalysisInProgress(true);
@@ -102,12 +89,9 @@ const HomePage: React.FC = () => {
         <div>
           Análise concluída com sucesso!
           <br />
-          <button
-            className="btn btn-sm btn-light mt-2"
-            onClick={() => handleShowReportViewerModal(clientId, mesAnalise)}
-          >
-            Ver Relatório
-          </button>
+          <Link to="/history" className="btn btn-sm btn-light mt-2">
+            Ver no Histórico
+          </Link>
         </div>
       ),
       type: 'success',
@@ -133,16 +117,23 @@ const HomePage: React.FC = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="mb-0">Clientes</h1>
         <div>
-          <button
-            className="btn btn-info me-2"
-            style={{ backgroundColor: 'var(--info-blue)', borderColor: 'var(--info-blue)', color: 'var(--primary-text)' }}
-            onClick={() => handleShowReportViewerModal()}
+          <Link 
+            to="/history"
+            className="btn btn-warning me-2"
+            style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
           >
-            Ver Relatórios
-          </button>
+            Ver Histórico
+          </Link>
+          <Link 
+            to="/prompts"
+            className="btn btn-warning me-2"
+            style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+          >
+            Gerenciar Prompts
+          </Link>
           <button
-            className="btn btn-success"
-            style={{ backgroundColor: 'var(--info-blue)', borderColor: 'var(--info-blue)', color: 'var(--primary-text)' }}
+            className="btn btn-warning"
+            style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
             onClick={handleShowAddClientModal}
             disabled={isAnalysisInProgress} // Desabilita se a análise estiver em andamento
           >
@@ -160,7 +151,7 @@ const HomePage: React.FC = () => {
               <li key={client.id} className="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary mb-2">
                 <div>
                   <h5>{client.nome_exibicao}</h5>
-                  <small className="text-muted">ID: {client.id}</small>
+                  <small className="text-white-50">ID: {client.id}</small>
                 </div>
                 <div>
                   <button
@@ -228,13 +219,7 @@ const HomePage: React.FC = () => {
         />
       )}
 
-      <ReportViewerModal
-        show={showReportViewerModal}
-        handleClose={handleCloseReportViewerModal}
-        clients={clients}
-        initialClientId={analysisCompletedClient || undefined}
-        initialMesAnalise={analysisCompletedMonth || undefined}
-      />
+      
     </div>
   );
 };
