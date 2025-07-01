@@ -241,13 +241,15 @@ class MediaAgent(BaseAgent):
             comparativos_df = pd.DataFrame([comparativos_finais])
             markdown_parts.append(formatar_markdown_consolidado(comparativos_df, "Comparativos (MoM e YoY)"))
 
+            # Formatar a lista de métricas para o prompt
+            metrics_to_analyze_list_markdown = "\n".join([f"- {m}" for m in metricas])
+
             prompt_template = load_prompt('media_analysis')
             prompt = prompt_template.format(
-                data_source=data_source.replace('_', ' ').title(),
-                client_name=client_name,
                 plataforma=data_source.replace('_', ' ').title(),
                 cliente_contexto=client_config.get("contexto_cliente_prompt", ""),
-                dados_markdown_summary_month_name=data_analise_dt.strftime('%B %Y'),
+                dados_markdown_summary_month_name=data_analise_dt.strftime('%B de %Y'),
+                metrics_to_analyze_list_markdown=metrics_to_analyze_list_markdown,
                 dados_markdown="\n".join(markdown_parts)
             )
 
