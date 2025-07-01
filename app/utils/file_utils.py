@@ -35,3 +35,34 @@ def create_directory_if_not_exists(path: str):
     """
     if not os.path.exists(path):
         os.makedirs(path)
+
+def get_report_path(client_name: str, mes_analise: str, file_type: str = "consolidated") -> str:
+    """
+    Gera o caminho completo para um arquivo de relatório.
+
+    Args:
+        client_name (str): O nome do cliente.
+        mes_analise (str): O mês da análise no formato 'AAAA-MM-DD'.
+        file_type (str): O tipo de arquivo (ex: 'consolidated', 'google_ads_kpis', 'meta_ads_kpis').
+
+    Returns:
+        str: O caminho absoluto para o arquivo de relatório.
+    """
+    safe_client_name = "".join(c if c.isalnum() else "_" for c in client_name)
+    safe_mes_analise = mes_analise.replace("-", "_")
+    
+    reports_base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'reports')
+    client_report_dir = os.path.join(reports_base_dir, safe_client_name, safe_mes_analise)
+    
+    create_directory_if_not_exists(client_report_dir)
+
+    if file_type == "consolidated":
+        file_name = f"{safe_client_name}_relatorio_consolidado_{safe_mes_analise}.txt"
+    elif file_type == "google_ads_kpis":
+        file_name = f"google_ads_kpis_output_{safe_mes_analise}.json"
+    elif file_type == "meta_ads_kpis":
+        file_name = f"meta_ads_kpis_output_{safe_mes_analise}.json"
+    else:
+        raise ValueError(f"Tipo de arquivo de relatório desconhecido: {file_type}")
+
+    return os.path.join(client_report_dir, file_name)

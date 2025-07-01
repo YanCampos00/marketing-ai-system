@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { Container, Card, Button, Row, Col, Spinner, Alert, Form } from 'react-bootstrap';
 import api from '../services/api';
 import * as Types from '../types';
-import ReportViewerModal from '../components/ReportViewerModal'; // Importe o novo modal
+import ReportViewerModal from '../components/ReportViewerModal';
+import { useClient } from '../context/ClientContext'; // Importa o hook useClient
 
 const HistoryPage: React.FC = () => {
   const [reports, setReports] = useState<Types.ReportSummary[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [clients, setClients] = useState<Types.Client[]>([]);
+  const { clients, loading: clientsLoading, error: clientsError } = useClient(); // Usa o contexto do cliente
+  const [loading, setLoading] = useState<boolean>(true); // Estado de carregamento para relatórios
+  const [error, setError] = useState<string | null>(null); // Estado de erro para relatórios
 
   // Estados dos filtros
   const [selectedClient, setSelectedClient] = useState<string>('');
@@ -21,19 +22,15 @@ const HistoryPage: React.FC = () => {
   const [selectedReportTitle, setSelectedReportTitle] = useState<string>('');
 
   useEffect(() => {
-    const fetchInitialData = async () => {
+    const fetchReports = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const [reportsResponse, clientsResponse] = await Promise.all([
-          api.get<Types.ReportSummary[]>('/reports/list'),
-          api.get<{ [key: string]: Types.Client }>('/clients'),
-        ]);
-
+        const reportsResponse = await api.get<Types.ReportSummary[]>('/reports/list');
         const sortedReports = reportsResponse.data.sort((a, b) => 
             new Date(b.mes_analise).getTime() - new Date(a.mes_analise).getTime()
         );
         setReports(sortedReports);
-        setClients(Object.values(clientsResponse.data));
-
       } catch (err) {
         setError('Erro ao carregar dados.');
         console.error(err);
@@ -42,7 +39,7 @@ const HistoryPage: React.FC = () => {
       }
     };
 
-    fetchInitialData();
+    fetchReports();
   }, []);
 
   const handleShowReportModal = async (report: Types.ReportSummary) => {
@@ -88,7 +85,7 @@ const HistoryPage: React.FC = () => {
     <Container className="mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="mb-0">Histórico de Análises</h1>
-        <Link to="/" className="btn btn-warning" style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}>Voltar para Home</Link>
+        <Link to="/" className="btn btn-cta">Voltar para Home</Link>
       </div>
 
       {/* Filtros */}
@@ -125,7 +122,7 @@ const HistoryPage: React.FC = () => {
         </Col>
       </Row>
 
-      {loading && (
+      {(loading || clientsLoading) && (
         <div className="text-center">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Carregando...</span>
@@ -133,9 +130,9 @@ const HistoryPage: React.FC = () => {
         </div>
       )}
 
-      {error && <Alert variant="danger">{error}</Alert>}
+      {(error || clientsError) && <Alert variant="danger">{error || clientsError}</Alert>}
 
-      {!loading && !error && (
+      {!loading && !clientsLoading && !error && !clientsError && (
         <Row>
           {filteredReports.length > 0 ? (
             filteredReports.map((report, index) => (
@@ -151,7 +148,7 @@ const HistoryPage: React.FC = () => {
                     </Card.Text>
                     <Button 
                       variant="primary" 
-                      style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+                      className="btn-cta"
                       onClick={() => handleShowReportModal(report)}
                     >
                       Ver Relatório Detalhado
