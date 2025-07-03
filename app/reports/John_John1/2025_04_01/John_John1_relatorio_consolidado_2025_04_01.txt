@@ -1,0 +1,29 @@
+##Relatório Consolidado de Performance de Marketing Digital - John John1 - Abril de 2025
+
+##Resumo Executivo e Insights Estratégicos
+
+Abril de 2025 apresentou um desempenho misto para John John1, com crescimento significativo ano a ano (YoY) contrastando com quedas significativas mês a mês (MoM) em ambas as plataformas, Google Ads e Meta Ads.  O ROI geral, embora positivo, sofreu redução em relação ao mês anterior, sinalizando a necessidade urgente de otimizações.  A queda MoM, particularmente acentuada em Meta Ads (-54.5% Spend, -53.85% Revenue), exige investigação imediata para identificar e corrigir as causas subjacentes. O crescimento YoY sólido, especialmente em Meta Ads (95.49% Spend, 136.57% Revenue), indica potencial não explorado a fundo.
+
+A análise detalhada revela problemas na segmentação e/ou performance dos anúncios, tanto no Google Ads quanto no Meta Ads. A queda na receita, apesar do aumento de gastos ano a ano em Google Ads,  sugere ineficiência em direcionar o investimento para campanhas eficazes. A queda simultânea de gastos e receita em Meta Ads indica um possível problema sistêmico na estratégia da plataforma, possivelmente relacionado a mudanças algoritmicas ou de segmentação.
+
+Para o próximo mês, é crucial focar na análise detalhada das campanhas de menor performance, identificando as causas das quedas MoM.  Uma auditoria das estratégias de segmentação e dos criativos é fundamental.  A replicação das estratégias bem-sucedidas do ano anterior, evidenciadas pelo crescimento YoY, deve ser priorizada, combinada com testes A/B para otimizar campanhas em ambas plataformas. A integração de dados entre plataformas permitirá uma visão mais completa e a identificação de sinergias para maximizar o ROI.
+
+
+##Dados Consolidados e Comparativos (vide tabela no enunciado)
+
+
+##Análises Detalhadas por Plataforma (vide análise detalhada do enunciado)
+
+
+##Conclusão e Próximos Passos
+
+**Prioridades para Maio de 2025:**
+
+1. **Investigação Urgente da Queda MoM em Meta Ads:**  Análise aprofundada das campanhas, segmentação e criativos para identificar a causa raiz da queda simultânea de gastos e receita.  Testes A/B para identificar melhorias em segmentação e criativos.
+2. **Otimização do Google Ads:** Análise das campanhas de baixo ROI, ajustando a segmentação e os lances para melhorar a performance e recuperar a receita perdida.  Replicação das estratégias bem-sucedidas YoY.
+3. **Integração de Dados e Sinergia entre Plataformas:**  Comparar as audiências e os resultados de campanhas semelhantes em ambas plataformas para identificar oportunidades de otimização e eficiência. Explorar a possibilidade de remarketing entre Google Ads e Meta Ads.
+4. **Monitoramento Contínuo:** Implementar um sistema de monitoramento diário com alertas para identificar e corrigir problemas em tempo real.
+5. **Relatório de Performance Semanal:** Implementar relatórios semanais mais detalhados para permitir intervenções mais rápidas e eficazes.
+
+
+Ao executar essas ações, John John1 poderá mitigar as perdas MoM, capitalizar o crescimento YoY e otimizar o retorno de investimento em marketing digital.

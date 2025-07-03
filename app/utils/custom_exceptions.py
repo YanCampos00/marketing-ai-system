@@ -1,3 +1,15 @@
+class PromptTemplateError(Exception):
+    """Exceção para erros relacionados a templates de prompt."""
+    pass
+
+class LLMConnectionError(Exception):
+    """Exceção para erros de conexão com o serviço de LLM."""
+    pass
+
+class DataSourceError(Exception):
+    """Exceção para erros relacionados a fontes de dados (ex: planilhas)."""
+    pass
+
 class ErroProcessamentoDadosAgente(Exception):
     """Classe base para erros específicos do processamento de dados dos agentes."""
     pass

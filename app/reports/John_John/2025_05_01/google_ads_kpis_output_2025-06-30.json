@@ -1,0 +1,46 @@
+{
+    "plataforma": "Google Ads",
+    "mes_analise": "2025-05-01",
+    "resumo_periodos": {
+        "atual": {
+            "Spend": 96543.95,
+            "Revenue": 259196.77000000002,
+            "Sessions": 122089.0,
+            "Conversions": 544.0,
+            "Clicks": 0,
+            "Impressions": 0,
+            "ROI": 168.47541456507633
+        },
+        "mom": {
+            "Spend": 80859.44000000002,
+            "Revenue": 265374.72,
+            "Sessions": 121217.0,
+            "Conversions": 546.0,
+            "Clicks": 0,
+            "Impressions": 0,
+            "ROI": 228.19262661230394
+        },
+        "yoy": {
+            "Spend": 117129.11,
+            "Revenue": 329883.93999999994,
+            "Sessions": 137734.0,
+            "Conversions": 711.0,
+            "Clicks": 0,
+            "Impressions": 0,
+            "ROI": 181.64129309955482
+        }
+    },
+    "comparativos": {
+        "Spend_MoM": 19.397252813029596,
+        "Spend_YoY": -17.574760023362256,
+        "Revenue_MoM": -2.328009992813164,
+        "Revenue_YoY": -21.427890669670045,
+        "ROI_MoM": -26.169650147673835,
+        "ROI_YoY": -7.248284963079659
+    },
+    "metricas_selecionadas": [
+        "Spend",
+        "Revenue",
+        "ROI"
+    ]
+}

@@ -1,4 +1,10 @@
 {
+  "llm_provider": "google",
+  "google_api_key_env": "GEMINI_API_KEY",
+  "gsheet_scope": [
+      "https://www.googleapis.com/auth/spreadsheets",
+      "https://www.googleapis.com/auth/drive"
+  ],
   "llm_model_name": "models/gemini-2.5-flash-preview-04-17-thinking",
   "retry_config": {
     "attempts": 3,
