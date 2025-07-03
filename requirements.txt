@@ -9,3 +9,5 @@ python-dateutil
 tenacity
 SQLAlchemy
 tabulate
+pydantic-settings
+pytest

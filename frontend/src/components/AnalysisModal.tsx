@@ -16,16 +16,21 @@ interface AnalysisModalProps {
 }
 
 const AnalysisModal: React.FC<AnalysisModalProps> = ({ show, handleClose, client, onAnalysisStart, onAnalysisComplete, onAnalysisError }) => {
-  const [mesAnalise, setMesAnalise] = useState<string>('');
-  const [metricasSelecionadas, setMetricasSelecionadas] = useState<any[]>([]);
+  // TODO: Remover após testes - Valores padrão para data e métricas
+  const [mesAnalise, setMesAnalise] = useState<string>('2025-05-01');
+  const [metricasSelecionadas, setMetricasSelecionadas] = useState<Types.SelectOption[]>([
+    { value: 'spend', label: 'Spend' },
+    { value: 'revenue', label: 'Revenue' },
+    { value: 'roi', label: 'ROI' },
+  ]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [availableMetrics, setAvailableMetrics] = useState<{ value: string; label: string }[]>([]);
+  const [availableMetrics, setAvailableMetrics] = useState<Types.SelectOption[]>([]);
 
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
         const response = await api.get<string[]>('/metrics');
-        const formattedMetrics = response.data.map(metric => ({
+        const formattedMetrics: Types.SelectOption[] = response.data.map(metric => ({
           value: metric.toLowerCase(), // Garante que o valor seja em minúsculas
           label: metric.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), // Formata para exibição
         }));
@@ -75,10 +80,10 @@ const AnalysisModal: React.FC<AnalysisModalProps> = ({ show, handleClose, client
       <Modal.Header closeButton className="bg-dark text-white">
         <Modal.Title>Analisar {client?.nome_exibicao}</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="bg-secondary text-white">
+      <Modal.Body className="bg-secondary">
         <Form>
           <Form.Group className="mb-3" controlId="formMesAnalise">
-            <Form.Label>Mês de Análise</Form.Label>
+            <Form.Label className="text-white">Mês de Análise</Form.Label>
             <Form.Control
               type="date"
               value={mesAnalise}
@@ -95,7 +100,7 @@ const AnalysisModal: React.FC<AnalysisModalProps> = ({ show, handleClose, client
               options={availableMetrics}
               className="basic-multi-select"
               classNamePrefix="select"
-              onChange={(selectedOptions) => setMetricasSelecionadas(selectedOptions as any[])}
+              onChange={(selectedOptions) => setMetricasSelecionadas(selectedOptions as Types.SelectOption[])}
               value={metricasSelecionadas}
               placeholder="Selecione as métricas..."
               styles={{
@@ -141,7 +146,7 @@ const AnalysisModal: React.FC<AnalysisModalProps> = ({ show, handleClose, client
           Cancelar
         </Button>
         <Button
-          style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+          className="btn-cta"
           onClick={handleSubmit}
           disabled={loading}
         >

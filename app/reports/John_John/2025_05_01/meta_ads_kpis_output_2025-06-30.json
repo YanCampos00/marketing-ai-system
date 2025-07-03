@@ -1,0 +1,46 @@
+{
+    "plataforma": "Meta Ads",
+    "mes_analise": "2025-05-01",
+    "resumo_periodos": {
+        "atual": {
+            "Spend": 21467.320000000003,
+            "Revenue": 51696.36000000001,
+            "Sessions": 55144.0,
+            "Conversions": 140.0,
+            "Clicks": 0,
+            "Impressions": 0,
+            "ROI": 140.81422366648468
+        },
+        "mom": {
+            "Spend": 16816.32,
+            "Revenue": 52492.76,
+            "Sessions": 58570.0,
+            "Conversions": 158.0,
+            "Clicks": 0,
+            "Impressions": 0,
+            "ROI": 212.15366976841548
+        },
+        "yoy": {
+            "Spend": 17454.61,
+            "Revenue": 53718.92000000001,
+            "Sessions": 49977.0,
+            "Conversions": 175.0,
+            "Clicks": 0,
+            "Impressions": 0,
+            "ROI": 207.76350774952869
+        }
+    },
+    "comparativos": {
+        "Spend_MoM": 27.65765637190541,
+        "Spend_YoY": 22.98939936211696,
+        "Revenue_MoM": -1.5171616047622456,
+        "Revenue_YoY": -3.765079417084343,
+        "ROI_MoM": -33.62630784553674,
+        "ROI_YoY": -32.22379368168705
+    },
+    "metricas_selecionadas": [
+        "Spend",
+        "Revenue",
+        "ROI"
+    ]
+}

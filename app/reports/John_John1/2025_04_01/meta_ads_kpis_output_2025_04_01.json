@@ -1,0 +1,22 @@
+{
+    "plataforma": "Meta Ads",
+    "mes_analise": "2025-04-01",
+    "kpis_selecionados": {
+        "Spend": 16816.32,
+        "Revenue": 52492.76,
+        "ROI": 3.12
+    },
+    "comparativos_selecionados": {
+        "Spend_MoM": -54.5,
+        "Spend_YoY": 95.49,
+        "Revenue_MoM": -53.85,
+        "Revenue_YoY": 136.57,
+        "ROI_MoM": 1.42,
+        "ROI_YoY": 21.02
+    },
+    "metricas_selecionadas": [
+        "Spend",
+        "Revenue",
+        "ROI"
+    ]
+}

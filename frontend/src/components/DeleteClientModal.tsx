@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import api from '../services/api';
-import * as Types from '../types'; // Importa tudo como Types
+import * as Types from '../types';
 import { toast } from 'react-toastify';
+import { useClient } from '../context/ClientContext'; // Importa o hook useClient
 
 interface DeleteClientModalProps {
   show: boolean;
   handleClose: () => void;
   client: Types.Client | null;
-  onClientDeleted: () => void; // Callback para atualizar a lista de clientes
+  // onClientDeleted: () => void; // Removido, pois o contexto cuida da atualização
 }
 
-const DeleteClientModal: React.FC<DeleteClientModalProps> = ({ show, handleClose, client, onClientDeleted }) => {
+const DeleteClientModal: React.FC<DeleteClientModalProps> = ({ show, handleClose, client }) => {
+  const { deleteClient } = useClient(); // Obtém a função deleteClient do contexto
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleDelete = async () => {
@@ -19,13 +20,11 @@ const DeleteClientModal: React.FC<DeleteClientModalProps> = ({ show, handleClose
 
     setLoading(true);
     try {
-      await api.delete(`/clients/${client.id}`);
-      toast.success('Cliente excluído com sucesso!');
-      onClientDeleted();
+      // Chama a função deleteClient do contexto
+      await deleteClient(client.id);
       handleClose();
     } catch (error: any) {
-      console.error('Erro ao excluir cliente:', error);
-      toast.error(`Erro ao excluir cliente: ${error.response?.data?.detail || error.message}`);
+      // Erro já tratado no contexto, mas pode-se adicionar lógica extra aqui se necessário
     } finally {
       setLoading(false);
     }
@@ -44,7 +43,7 @@ const DeleteClientModal: React.FC<DeleteClientModalProps> = ({ show, handleClose
         <Button variant="secondary" onClick={handleClose} disabled={loading}>
           Cancelar
         </Button>
-        <Button variant="danger" onClick={handleDelete} disabled={loading}>
+        <Button className="btn-danger-custom" onClick={handleDelete} disabled={loading}>
           {loading ? 'Excluindo...' : 'Excluir'}
         </Button>
       </Modal.Footer>

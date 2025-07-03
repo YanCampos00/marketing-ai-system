@@ -1,0 +1,18 @@
+{
+    "plataforma": "Google Ads",
+    "mes_analise": "2025-06-01",
+    "kpis_selecionados": {},
+    "comparativos_selecionados": {
+        "Spend_MoM": 0.0,
+        "Spend_YoY": -100.0,
+        "Revenue_MoM": 0.0,
+        "Revenue_YoY": -100.0,
+        "ROI_MoM": 0.0,
+        "ROI_YoY": -100.0
+    },
+    "metricas_selecionadas": [
+        "Spend",
+        "Revenue",
+        "ROI"
+    ]
+}

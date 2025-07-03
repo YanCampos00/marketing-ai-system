@@ -1,21 +1,26 @@
 import os
+from app.utils.custom_exceptions import PromptTemplateError
+from app.db.database import SessionLocal, PromptDB
 
-RAIZ_DO_PROJETO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+def load_prompt(prompt_name: str) -> str:
+    """
+    Carrega um template de prompt do banco de dados.
 
-def carregar_prompt_de_arquivo(caminho_relativo_ao_projeto):
+    Args:
+        prompt_name (str): O nome do prompt a ser carregado.
+
+    Returns:
+        str: O conteúdo do template do prompt.
     """
-    Lê e retorna o conteúdo de um arquivo de prompt.
-    O caminho_relativo_ao_projeto deve ser o caminho a partir da raiz do projeto.
-    Ex: "prompts/google_agent_prompt.txt"
-    """
-    caminho_absoluto = os.path.join(RAIZ_DO_PROJETO, caminho_relativo_ao_projeto)
-    
+    db = SessionLocal()
     try:
-        with open(caminho_absoluto, 'r', encoding='utf-8') as f:
-            return f.read()
-    except FileNotFoundError:
-        print(f"Erro Crítico: Arquivo de prompt não encontrado em '{caminho_absoluto}'. Verifique o caminho e o nome do arquivo.")
-        return None 
+        prompt_db = db.query(PromptDB).filter(PromptDB.nome == prompt_name).first()
+        if not prompt_db:
+            raise PromptTemplateError(f"O template de prompt '{prompt_name}' não foi encontrado no banco de dados.")
+        return prompt_db.conteudo
+    except PromptTemplateError:
+        raise # Re-raise a exceção customizada
     except Exception as e:
-        print(f"Erro Crítico ao carregar prompt de '{caminho_absoluto}': {e}")
-        return None
+        raise PromptTemplateError(f"Erro ao carregar o prompt '{prompt_name}' do banco de dados: {e}")
+    finally:
+        db.close()

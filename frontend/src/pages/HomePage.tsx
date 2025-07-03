@@ -1,47 +1,24 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import api from '../services/api';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import * as Types from '../types';
 import AnalysisModal from '../components/AnalysisModal';
 import AddClientModal from '../components/AddClientModal';
 import EditClientModal from '../components/EditClientModal';
 import DeleteClientModal from '../components/DeleteClientModal';
-import ReportViewerModal from '../components/ReportViewerModal';
 import { toast } from 'react-toastify';
+import { useClient } from '../context/ClientContext'; // Importa o hook useClient
 
 const HomePage: React.FC = () => {
-  const [clients, setClients] = useState<Types.Client[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isAnalysisInProgress, setIsAnalysisInProgress] = useState<boolean>(false); // Novo estado
+  const { clients, loading, error } = useClient(); // Usa o contexto
+  const [isAnalysisInProgress, setIsAnalysisInProgress] = useState<boolean>(false);
 
   // Estados para os modais
   const [showAnalysisModal, setShowAnalysisModal] = useState<boolean>(false);
   const [showAddClientModal, setShowAddClientModal] = useState<boolean>(false);
   const [showEditClientModal, setShowEditClientModal] = useState<boolean>(false);
   const [showDeleteClientModal, setShowDeleteClientModal] = useState<boolean>(false);
-  const [showReportViewerModal, setShowReportViewerModal] = useState<boolean>(false);
-
   const [selectedClient, setSelectedClient] = useState<Types.Client | null>(null);
-  const [analysisCompletedClient, setAnalysisCompletedClient] = useState<string | null>(null);
-  const [analysisCompletedMonth, setAnalysisCompletedMonth] = useState<string | null>(null);
-
-  const fetchClients = useCallback(async () => {
-    try {
-      const response = await api.get<{ [key: string]: Types.Client }>('/clients');
-      const clientsArray = Object.values(response.data);
-      setClients(clientsArray);
-    } catch (err) {
-      setError('Erro ao carregar clientes.');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchClients();
-  }, [fetchClients]);
-
+  
   // Funções para abrir/fechar modais
   const handleShowAnalysisModal = (client: Types.Client) => {
     setSelectedClient(client);
@@ -56,7 +33,7 @@ const HomePage: React.FC = () => {
   const handleShowAddClientModal = () => setShowAddClientModal(true);
   const handleCloseAddClientModal = () => {
     setShowAddClientModal(false);
-    fetchClients(); // Recarrega clientes após adicionar
+    // fetchClients() é chamado automaticamente pelo ClientProvider após a adição
   };
 
   const handleShowEditClientModal = (client: Types.Client) => {
@@ -66,7 +43,7 @@ const HomePage: React.FC = () => {
   const handleCloseEditClientModal = () => {
     setShowEditClientModal(false);
     setSelectedClient(null);
-    fetchClients(); // Recarrega clientes após editar
+    // fetchClients() é chamado automaticamente pelo ClientProvider após a edição
   };
 
   const handleShowDeleteClientModal = (client: Types.Client) => {
@@ -76,42 +53,28 @@ const HomePage: React.FC = () => {
   const handleCloseDeleteClientModal = () => {
     setShowDeleteClientModal(false);
     setSelectedClient(null);
-    fetchClients(); // Recarrega clientes após excluir
-  };
-
-  const handleShowReportViewerModal = (clientId?: string, mesAnalise?: string) => {
-    setAnalysisCompletedClient(clientId || null);
-    setAnalysisCompletedMonth(mesAnalise || null);
-    setShowReportViewerModal(true);
-  };
-
-  const handleCloseReportViewerModal = () => {
-    setShowReportViewerModal(false);
-    setAnalysisCompletedClient(null);
-    setAnalysisCompletedMonth(null);
+    // fetchClients() é chamado automaticamente pelo ClientProvider após a exclusão
   };
 
   const handleAnalysisStart = () => {
     setIsAnalysisInProgress(true);
   };
 
-  const handleAnalysisComplete = (clientId: string, mesAnalise: string) => {
+  const handleAnalysisComplete = () => {
     setIsAnalysisInProgress(false);
     toast.update('analysis-progress', {
       render: (
         <div>
           Análise concluída com sucesso!
           <br />
-          <button
-            className="btn btn-sm btn-light mt-2"
-            onClick={() => handleShowReportViewerModal(clientId, mesAnalise)}
-          >
-            Ver Relatório
-          </button>
+          <Link to="/history" className="btn btn-sm btn-light mt-2">
+            Ver no Histórico
+          </Link>
         </div>
       ),
       type: 'success',
       autoClose: 5000,
+      closeButton: true,
     });
     handleCloseAnalysisModal();
   };
@@ -133,16 +96,20 @@ const HomePage: React.FC = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="mb-0">Clientes</h1>
         <div>
-          <button
-            className="btn btn-info me-2"
-            style={{ backgroundColor: 'var(--info-blue)', borderColor: 'var(--info-blue)', color: 'var(--primary-text)' }}
-            onClick={() => handleShowReportViewerModal()}
+          <Link 
+            to="/history"
+            className="btn btn-cta me-2"
           >
-            Ver Relatórios
-          </button>
+            Ver Histórico
+          </Link>
+          <Link 
+            to="/prompts"
+            className="btn btn-cta me-2"
+          >
+            Gerenciar Prompts
+          </Link>
           <button
-            className="btn btn-success"
-            style={{ backgroundColor: 'var(--info-blue)', borderColor: 'var(--info-blue)', color: 'var(--primary-text)' }}
+            className="btn btn-cta"
             onClick={handleShowAddClientModal}
             disabled={isAnalysisInProgress} // Desabilita se a análise estiver em andamento
           >
@@ -160,27 +127,25 @@ const HomePage: React.FC = () => {
               <li key={client.id} className="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary mb-2">
                 <div>
                   <h5>{client.nome_exibicao}</h5>
-                  <small className="text-muted">ID: {client.id}</small>
+                  <small className="text-white-50">ID: {client.id}</small>
                 </div>
                 <div>
                   <button
-                    className="btn btn-warning me-2"
-                    style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+                    className="btn btn-cta me-2"
                     onClick={() => handleShowAnalysisModal(client)}
                     disabled={isAnalysisInProgress} // Desabilita se a análise estiver em andamento
                   >
                     Analisar
                   </button>
                   <button
-                    className="btn btn-info me-2"
-                    style={{ backgroundColor: 'var(--info-blue)', borderColor: 'var(--info-blue)', color: 'var(--primary-text)' }}
+                    className="btn btn-info-custom me-2"
                     onClick={() => handleShowEditClientModal(client)}
                     disabled={isAnalysisInProgress} // Desabilita se a análise estiver em andamento
                   >
                     Editar
                   </button>
                   <button
-                    className="btn btn-danger"
+                    className="btn btn-danger-custom"
                     onClick={() => handleShowDeleteClientModal(client)}
                     disabled={isAnalysisInProgress} // Desabilita se a análise estiver em andamento
                   >
@@ -198,16 +163,16 @@ const HomePage: React.FC = () => {
           show={showAnalysisModal}
           handleClose={handleCloseAnalysisModal}
           client={selectedClient}
-          onAnalysisStart={handleAnalysisStart} // Nova prop
+          onAnalysisStart={handleAnalysisStart}
           onAnalysisComplete={handleAnalysisComplete}
-          onAnalysisError={handleAnalysisError} // Nova prop
+          onAnalysisError={handleAnalysisError}
         />
       )}
 
       <AddClientModal
         show={showAddClientModal}
         handleClose={handleCloseAddClientModal}
-        onClientAdded={fetchClients}
+        
       />
 
       {selectedClient && (
@@ -215,7 +180,7 @@ const HomePage: React.FC = () => {
           show={showEditClientModal}
           handleClose={handleCloseEditClientModal}
           client={selectedClient}
-          onClientUpdated={fetchClients}
+          
         />
       )}
 
@@ -224,17 +189,9 @@ const HomePage: React.FC = () => {
           show={showDeleteClientModal}
           handleClose={handleCloseDeleteClientModal}
           client={selectedClient}
-          onClientDeleted={fetchClients}
+          
         />
       )}
-
-      <ReportViewerModal
-        show={showReportViewerModal}
-        handleClose={handleCloseReportViewerModal}
-        clients={clients}
-        initialClientId={analysisCompletedClient || undefined}
-        initialMesAnalise={analysisCompletedMonth || undefined}
-      />
     </div>
   );
 };
