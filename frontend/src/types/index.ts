@@ -12,3 +12,16 @@ export interface AnalysisRequest {
   mes_analise: string; // Formato YYYY-MM-DD
   metricas_selecionadas: string[];
 }
+
+export interface Report {
+  client_name: string;
+  report_date: string;
+  report_type: string;
+  file_name: string;
+}
+
+// Tipo para as opções do react-select
+export interface SelectOption {
+  value: string;
+  label: string;
+}

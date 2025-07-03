@@ -1,64 +1,55 @@
+import pandas as pd
+import re
+
 def limpar_numero(valor):
     """
-    Converte uma string numérica (potencialmente com 'R$', separador de milhar ',',
-    e separador decimal '.') para float ou int.
-    - Remove 'R$'
-    - Remove ',' (assumido como separador de milhar)
-    - '.' é tratado como separador decimal.
+    Converte para float, tratando diferentes formatos numéricos (BR/US) e símbolos.
+    Retorna None se não for possível converter.
     """
-    if valor is None:
+    if pd.isna(valor) or valor == '':
         return None
-    if isinstance(valor, (int, float)):
-        # Se já for int ou float, retorna, garantindo tipo correto
-        return float(valor) if isinstance(valor, float) else int(valor)
-
-    if not isinstance(valor, str):
-        try:
-            # Tenta converter diretamente se não for string
-            temp_val = float(valor)
-            return int(temp_val) if temp_val.is_integer() else temp_val
-        except (ValueError, TypeError):
-            return None
-
-    s = str(valor).strip()
-    s = s.replace("R$", "").strip() # Remove 'R$' e espaços adjacentes
-    s = s.replace(",", "")         # Remove ',' (assumido como separador de milhar)
-
-    if not s: # String vazia após limpeza
+    s_valor = str(valor).strip()
+    if not s_valor:
         return None
+
+    # Remove símbolos de moeda e outros caracteres não numéricos, exceto '.' e ','
+    cleaned_value = re.sub(r'[^\d.,]+', '', s_valor)
+
+    # Detecta o separador decimal: se a última ocorrência for vírgula, é formato BR
+    if ',' in cleaned_value and '.' in cleaned_value:
+        if cleaned_value.rfind(',') > cleaned_value.rfind('.'):
+            # Formato Brasileiro: remove pontos de milhar, troca vírgula por ponto decimal
+            cleaned_value = cleaned_value.replace('.', '')
+            cleaned_value = cleaned_value.replace(',', '.')
+        else:
+            # Formato Americano: remove vírgulas de milhar
+            cleaned_value = cleaned_value.replace(',', '')
+    elif ',' in cleaned_value:
+        # Apenas vírgula presente, assume que é separador decimal (formato BR)
+        cleaned_value = cleaned_value.replace(',', '.')
+    # Se apenas ponto presente, assume que é separador decimal (formato US), não faz nada
 
     try:
-        f = float(s) # O '.' já é o decimal correto
-        return int(f) if f.is_integer() else f
+        return round(float(cleaned_value), 2)
     except ValueError:
         return None
 
-
-def limpar_porcentagem(valor_str):
+def limpar_porcentagem(valor):
     """
-    Converte uma string de porcentagem (ex: "1,234.56%" ou "0.56%") para float (ex: 0.0056).
-    Assume ',' como separador de milhar (se houver) e '.' como decimal.
+    Converte porcentagem para float, tratando diferentes formatos e símbolos.
+    Retorna None se não for possível.
     """
-    if valor_str is None:
+    if pd.isna(valor) or valor == '':
         return None
-    if isinstance(valor_str, (int, float)):
-        return float(valor_str)
-
-    if not isinstance(valor_str, str):
-        try:
-            return float(valor_str)
-        except (ValueError, TypeError):
-            return None
-
-    s = valor_str.strip()
-    s = s.replace("%", "").strip()   # Remove o símbolo de porcentagem
-    s = s.replace(",", "")           # Remove ',' (assumido como separador de milhar)
-    # O '.' já é o decimal correto
-
-    if not s: # String vazia após limpeza
-        return None
-
+    s_valor = str(valor).strip().replace('%', '')
+    
     try:
-        return float(s) / 100.0
+        # Tenta converter diretamente (assume ponto como decimal)
+        return round(float(s_valor), 2)
     except ValueError:
-        return None
+        # Se falhar, tenta trocar vírgula por ponto e converter
+        s_valor = s_valor.replace(',', '.')
+        try:
+            return round(float(s_valor), 2)
+        except ValueError:
+            return None

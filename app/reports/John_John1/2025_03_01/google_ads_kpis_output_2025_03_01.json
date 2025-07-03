@@ -1,0 +1,22 @@
+{
+    "plataforma": "Google Ads",
+    "mes_analise": "2025-03-01",
+    "kpis_selecionados": {
+        "Spend": 98399.37,
+        "Revenue": 324809.54,
+        "ROI": 3.3
+    },
+    "comparativos_selecionados": {
+        "Spend_MoM": 42.22,
+        "Spend_YoY": 14.15,
+        "Revenue_MoM": 12.71,
+        "Revenue_YoY": 20.44,
+        "ROI_MoM": -20.75,
+        "ROI_YoY": 5.51
+    },
+    "metricas_selecionadas": [
+        "Spend",
+        "Revenue",
+        "ROI"
+    ]
+}

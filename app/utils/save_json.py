@@ -1,94 +1,52 @@
-import os
 import json
+import os
+from datetime import datetime
+import logging
 
-def safe_float(val, casas=2):
-    """Converte para float e arredonda, retorna None se não for possível."""
-    try:
-        if val is None:
-            return None
-        return round(float(val), casas)
-    except Exception:
-        return None
-
-def safe_int(val):
-    """Converte para int, retorna None se não for possível."""
-    try:
-        if val is None:
-            return None
-        return int(val)
-    except Exception:
-        return None
+logger = logging.getLogger(__name__)
 
 def salvar_json_kpis(
-    plataforma, mes_analise, resumo_periodos, comparativos, pasta_saida, sufixo_nome, metricas_selecionadas
+    plataforma: str,
+    mes_analise: str,
+    resumo_periodos: dict,
+    comparativos: dict,
+    pasta_saida: str,
+    sufixo_nome: str = "",
+    metricas_selecionadas: list = []
 ):
-    # Função auxiliar para formatar variações com segurança
-    def format_variation(value, unit="%"):
-        if value is None or value == float('inf') or value == float('-inf'):
-            return "N/A"
-        # Para taxas de conversão, a unidade é 'pp' (pontos percentuais)
-        if unit == "pp":
-            return f"{value:+.2f}pp"
-        return f"{value:+.1f}{unit}"
+    """
+    Salva os KPIs processados e filtrados em um arquivo JSON.
+    Apenas as métricas selecionadas pelo usuário são salvas.
+    """
+    # Filtra o resumo do período atual
+    kpis_atuais_filtrados = {k: round(v, 2) if isinstance(v, (int, float)) else v for k, v in resumo_periodos.get('atual', {}).items() if k in metricas_selecionadas}
 
-    # Mapeamento de métricas para seus nomes de KPI no JSON
-    kpi_names_map = {
-        'ROI': 'ROI',
-        'Conversion_Rate': 'CONVERSION_RATE',
-        'Spend': 'SPEND',
-        'Revenue': 'REVENUE',
-        'Conversions': 'CONVERSIONS',
-        'CPS': 'CPS',
-        'TKM': 'TKM',
-        'CPC': 'CPC',
-        'CPM': 'CPM'
-    }
-
-    kpis_atuais = {}
+    # Filtra os comparativos (MoM e YoY)
+    comparativos_filtrados = {}
     for metrica in metricas_selecionadas:
-        kpi_base_name = kpi_names_map.get(metrica)
-        if kpi_base_name:
-            if metrica == 'Conversion_Rate':
-                kpis_atuais[f"{kpi_base_name}_CURRENT_{sufixo_nome}"] = safe_float(resumo_periodos['atual'].get(metrica), 4)
-            elif metrica in ['Spend', 'Revenue', 'ROI', 'CPS', 'TKM', 'CPC', 'CPM']:
-                kpis_atuais[f"{kpi_base_name}_CURRENT_{sufixo_nome}"] = safe_float(resumo_periodos['atual'].get(metrica), 2)
-            elif metrica == 'Conversions':
-                kpis_atuais[f"{kpi_base_name}_CURRENT_{sufixo_nome}"] = safe_int(resumo_periodos['atual'].get(metrica))
+        mom_key = f"{metrica}_MoM"
+        yoy_key = f"{metrica}_YoY"
+        if mom_key in comparativos:
+            comparativos_filtrados[mom_key] = round(comparativos[mom_key], 2) if isinstance(comparativos[mom_key], (int, float)) else comparativos[mom_key]
+        if yoy_key in comparativos:
+            comparativos_filtrados[yoy_key] = round(comparativos[yoy_key], 2) if isinstance(comparativos[yoy_key], (int, float)) else comparativos[yoy_key]
 
-    comp_mom = {}
-    for metrica in metricas_selecionadas:
-        kpi_base_name = kpi_names_map.get(metrica)
-        if kpi_base_name and f'{metrica}_MoM' in comparativos:
-            if metrica == 'Conversion_Rate':
-                comp_mom[f"VARIATION_{kpi_base_name}_MOM_{sufixo_nome}"] = format_variation(comparativos.get(f'{metrica}_MoM'), unit="pp")
-            else:
-                comp_mom[f"VARIATION_{kpi_base_name}_MOM_{sufixo_nome}"] = format_variation(comparativos.get(f'{metrica}_MoM'))
-
-    comp_yoy = {}
-    for metrica in metricas_selecionadas:
-        kpi_base_name = kpi_names_map.get(metrica)
-        if kpi_base_name and f'{metrica}_YoY' in comparativos:
-            if metrica == 'Conversion_Rate':
-                comp_yoy[f"VARIATION_{kpi_base_name}_YOY_{sufixo_nome}"] = format_variation(comparativos.get(f'{metrica}_YoY'), unit="pp")
-            else:
-                comp_yoy[f"VARIATION_{kpi_base_name}_YOY_{sufixo_nome}"] = format_variation(comparativos.get(f'{metrica}_YoY'))
-
-    dict_saida = {
-        "PLATFORM": str(plataforma),
-        "ANALYSIS_MONTH": str(mes_analise),
-        "CURRENT_KPIs": kpis_atuais,
-        "COMPARATIVES_MOM": comp_mom,
-        "COMPARATIVES_YOY": comp_yoy
+    data_to_save = {
+        "plataforma": plataforma,
+        "mes_analise": mes_analise,
+        "kpis_selecionados": kpis_atuais_filtrados,
+        "comparativos_selecionados": comparativos_filtrados,
+        "metricas_selecionadas": metricas_selecionadas
     }
 
     os.makedirs(pasta_saida, exist_ok=True)
-    nome_arquivo = f"{plataforma.lower().replace(' ', '_')}_{mes_analise.replace(' ', '_')}.json"
-    caminho_arquivo = os.path.join(pasta_saida, nome_arquivo)
-    try:
-        with open(caminho_arquivo, "w", encoding="utf-8") as f:
-            json.dump(dict_saida, f, ensure_ascii=False, indent=2)
-        print(f"Arquivo JSON salvo em: {caminho_arquivo}")
-    except Exception as e:
-        print(f"Erro ao salvar JSON: {e}")
-        raise
+    # Usar um nome de arquivo consistente baseado no mês de análise, não no timestamp da execução
+    safe_sufixo = sufixo_nome.lower().replace(' ', '_')
+    safe_mes = mes_analise.replace('-', '_')
+    file_name = f"{safe_sufixo}_kpis_output_{safe_mes}.json"
 
+    file_path = os.path.join(pasta_saida, file_name)
+
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(data_to_save, f, ensure_ascii=False, indent=4)
+    return file_path
