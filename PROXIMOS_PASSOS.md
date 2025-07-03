@@ -13,7 +13,7 @@ Este documento delineia as próximas tarefas e melhorias planejadas para o proje
 -   [x] **Centralização de Caminhos de Relatórios**: A função `get_report_path` em `app/utils/file_utils.py` agora centraliza a lógica de nomenclatura e criação de caminhos de relatórios.
 -   [x] **Gerenciamento de Estado Global no Frontend**: Foram implementados `ClientContext` e `PromptContext` para gerenciar o estado global e evitar chamadas de API repetitivas.
 -   [x] **Tratamento de Erros Centralizado no Frontend**: Interceptadores do Axios foram configurados em `src/services/api.ts` para padronizar o tratamento de erros.
--   [x] **Refatoração de Estilos CSS**: Estilos inline foram movidos para arquivos `.css` e padronizados com classes.
+-   [x] **Refatoração de Estilos CSS**: Estilos inline foram movidos para arquivos `.css` e padronizados com classes. A lista de clientes na `HomePage` foi refatorada para usar um componente `client-card` totalmente customizado, resolvendo problemas de alinhamento e altura inconsistente.
 
 --- 
 
