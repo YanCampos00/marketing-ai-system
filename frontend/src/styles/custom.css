@@ -13,3 +13,40 @@ body {
   background-color: var(--primary-bg);
   color: var(--primary-text);
 }
+
+/* Estilos para botões customizados */
+.btn-cta {
+  background-color: var(--cta-yellow);
+  border-color: var(--cta-yellow);
+  color: var(--dark-contrast);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-cta:hover {
+  background-color: #E6B800 !important;
+  border-color: #E6B800 !important;
+}
+
+.btn-info-custom {
+  background-color: var(--info-blue);
+  border-color: var(--info-blue);
+  color: var(--primary-text);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-info-custom:hover {
+  background-color: #258CD8 !important; /* Slightly darker blue */
+  border-color: #258CD8 !important;
+}
+
+.btn-danger-custom {
+  background-color: #DC3545;
+  border-color: #DC3545;
+  color: var(--primary-text);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-danger-custom:hover {
+  background-color: #BD2130 !important;
+  border-color: #BD2130 !important;
+}

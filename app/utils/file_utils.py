@@ -1,6 +1,8 @@
 import os
 import json
-from app.utils.save_json import salvar_json_kpis # Importação corrigida
+import logging
+
+logger = logging.getLogger(__name__)
 
 def save_to_file(filepath, content):
     """
@@ -11,65 +13,54 @@ def save_to_file(filepath, content):
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         with open(filepath, "w", encoding="utf-8") as f:
-            if isinstance(content, dict):
-                # Previne salvar dicionários gigantes com markdown
-                if "markdown" in content and "caminho_json" in content:
-                    print(f"[AVISO] Tentativa de salvar dicionário de retorno do agente inteiro! Salve apenas o JSON de KPIs.")
-                    f.write(str(content))  # Ou apenas salve o markdown, se quiser
-                else:
-                    json.dump(content, f, indent=2, ensure_ascii=False)
-                    print(f"Conteúdo JSON salvo em: {filepath}")
-            elif isinstance(content, list):
+            if isinstance(content, (dict, list)):
                 json.dump(content, f, indent=2, ensure_ascii=False)
-                print(f"Conteúdo JSON salvo em: {filepath}")
             else:
                 f.write(str(content))
-                print(f"Conteúdo de texto salvo em: {filepath}")
     except Exception as e:
-        print(f"Erro ao salvar arquivo {filepath}: {e}")
+        logger.error(f"Erro ao salvar arquivo {filepath}: {e}")
 
-def carregar_kpis_json(caminho_arquivo_json):
+def read_from_json(file_path: str) -> dict:
     """
-    Lê e retorna o dicionário de um arquivo JSON salvo com KPIs.
-    Retorna None se o arquivo não existir ou houver erro de leitura.
+    Lê dados de um arquivo JSON.
     """
-    if not os.path.exists(caminho_arquivo_json):
-        print(f"[file_utils] Arquivo JSON não encontrado: {caminho_arquivo_json}")
-        return None
-    try:
-        with open(caminho_arquivo_json, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"[file_utils] Erro ao carregar JSON: {e}")
-        return None
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def create_directory_if_not_exists(path: str):
+    """
+    Cria um diretório se ele não existir.
+    """
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def get_report_path(client_name: str, mes_analise: str, file_type: str = "consolidated") -> str:
+    """
+    Gera o caminho completo para um arquivo de relatório.
+
+    Args:
+        client_name (str): O nome do cliente.
+        mes_analise (str): O mês da análise no formato 'AAAA-MM-DD'.
+        file_type (str): O tipo de arquivo (ex: 'consolidated', 'google_ads_kpis', 'meta_ads_kpis').
+
+    Returns:
+        str: O caminho absoluto para o arquivo de relatório.
+    """
+    safe_client_name = "".join(c if c.isalnum() else "_" for c in client_name)
+    safe_mes_analise = mes_analise.replace("-", "_")
     
+    reports_base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'reports')
+    client_report_dir = os.path.join(reports_base_dir, safe_client_name, safe_mes_analise)
+    
+    create_directory_if_not_exists(client_report_dir)
 
-def gerar_caminho_kpis_json(plataforma, mes_analise, cliente_nome=None):
-    """
-    Gera o caminho do arquivo JSON de KPIs para o cliente/plataforma/mês.
-    Exemplo de saída: app/reports/cliente_seguro/mes_seguro/plataforma_segura_mes_seguro.json
-    """
-    # Caminho para o diretório do arquivo atual (file_utils.py)
-    current_file_dir = os.path.dirname(os.path.abspath(__file__))
-    # Caminho para o diretório 'app'
-    app_dir = os.path.dirname(current_file_dir)
-    # Caminho para a raiz do projeto (marketing_ai_system_v1)
-    project_root_dir = os.path.dirname(app_dir)
-
-    # Agora, construa o caminho para 'app/reports' a partir da raiz do projeto
-    pasta_base_relatorios = os.path.join(project_root_dir, "app", "reports")
-
-    plataforma_folder = plataforma.lower().replace(" ", "_")
-    mes_analise_file = mes_analise.replace(" ", "_")
-
-    if cliente_nome:
-        cliente_folder = cliente_nome.lower().replace(" ", "_")
-        pasta_destino = os.path.join(pasta_base_relatorios, cliente_folder, mes_analise_file)
-        nome_arquivo = f"{plataforma_folder}_kpis_output_{mes_analise_file}.json"
+    if file_type == "consolidated":
+        file_name = f"{safe_client_name}_relatorio_consolidado_{safe_mes_analise}.txt"
+    elif file_type == "google_ads_kpis":
+        file_name = f"google_ads_kpis_output_{safe_mes_analise}.json"
+    elif file_type == "meta_ads_kpis":
+        file_name = f"meta_ads_kpis_output_{safe_mes_analise}.json"
     else:
-        # Fallback, embora cliente_nome deva ser sempre fornecido
-        pasta_destino = os.path.join(pasta_base_relatorios, plataforma_folder, mes_analise_file)
-        nome_arquivo = f"{plataforma_folder}_kpis_output_{mes_analise_file}.json"
+        raise ValueError(f"Tipo de arquivo de relatório desconhecido: {file_type}")
 
-    os.makedirs(pasta_destino, exist_ok=True)
-    return os.path.join(pasta_destino, nome_arquivo)
+    return os.path.join(client_report_dir, file_name)

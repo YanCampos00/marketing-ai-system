@@ -1,0 +1,37 @@
+##Relatório Consolidado de Performance de Marketing Digital - John John1 - Março de 2025
+
+##Resumo Executivo e Insights Estratégicos
+
+Março de 2025 apresentou resultados mistos para John John1.  Enquanto o Meta Ads demonstrou um crescimento robusto em receita e ROI (33.68% MoM e 169.12% YoY respectivamente), o Google Ads, apesar do crescimento de receita (12.71% MoM), apresentou queda significativa no ROI (-20.75% MoM) devido a um aumento desproporcional no gasto (42.22% MoM).  Este contraste destaca a necessidade de otimização da alocação de recursos no Google Ads, enquanto se busca replicar o sucesso obtido no Meta Ads. O crescimento YoY na receita, tanto em Google Ads (20.44%) quanto em Meta Ads (169.12%), demonstra um potencial de mercado ainda maior que pode ser explorado com uma estratégia mais eficiente.
+
+O principal desafio reside na performance do Google Ads, onde o aumento significativo de gastos não se traduziu em um retorno proporcional.  A análise detalhada indica ineficiência na alocação de verba, demandando investigação imediata em campanhas individuais para identificar os pontos de desperdício e otimizar o custo por conversão.  Por outro lado, o Meta Ads apresenta uma oportunidade significativa de crescimento sustentado, exigindo a análise dos fatores que impulsionaram o expressivo crescimento YoY.
+
+Para o próximo mês, a prioridade é otimizar a performance do Google Ads, revisando a alocação de verba e focando em campanhas de alta performance.  A análise de público-alvo e a segmentação devem ser aprimoradas em ambas as plataformas.  O sucesso do Meta Ads deve ser analisado em busca de insights replicáveis no Google Ads.  Recomenda-se o monitoramento constante dos KPIs, com foco no ROI e no custo por aquisição, permitindo ajustes ágeis nas estratégias.  A integração das plataformas deve explorar sinergias, utilizando dados de uma para otimizar a performance da outra, com especial atenção na análise cross-plataforma do público-alvo.
+
+
+##Dados Consolidados e Comparativos (vide tabela no enunciado)
+
+
+##Análises Detalhadas por Plataforma (vide análise detalhada no enunciado)
+
+
+##Conclusão e Próximos Passos
+
+O sucesso de março no Meta Ads serve como modelo para a otimização do Google Ads.  As ações prioritárias para abril incluem:
+
+**Alta Prioridade:**
+
+1. **Auditoria completa das campanhas do Google Ads:** Identificar e corrigir as campanhas com baixo ROI, redirecionando recursos para as mais performáticas.
+2. **Análise detalhada do custo por conversão e taxa de conversão:**  Otimizar a segmentação e os lances para melhorar a eficiência do gasto.
+
+**Média Prioridade:**
+
+3. **Replicar o sucesso do Meta Ads no Google Ads:** Identificar e implementar as estratégias bem-sucedidas do Meta Ads em campanhas similares no Google Ads.
+4. **Análise cross-plataforma do público-alvo:**  Identificar públicos-alvo mais lucrativos e otimizar a segmentação em ambas as plataformas.
+
+**Baixa Prioridade:**
+
+5. **Testes A/B em anúncios e landing pages:** Melhorar a taxa de conversão e a experiência do usuário.
+
+
+Implementando essas ações, espera-se uma melhora significativa no ROI do Google Ads e a manutenção do crescimento positivo do Meta Ads, maximizando o retorno do investimento em marketing digital para John John1.

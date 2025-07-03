@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import api from '../services/api';
-import * as Types from '../types'; // Importa tudo como Types
+import * as Types from '../types';
 import { toast } from 'react-toastify';
+import { useClient } from '../context/ClientContext'; // Importa o hook useClient
 
 interface AddClientModalProps {
   show: boolean;
   handleClose: () => void;
-  onClientAdded: () => void; // Callback para atualizar a lista de clientes
+  // onClientAdded: () => void; // Removido, pois o contexto cuida da atualização
 }
 
-const AddClientModal: React.FC<AddClientModalProps> = ({ show, handleClose, onClientAdded }) => {
+const AddClientModal: React.FC<AddClientModalProps> = ({ show, handleClose }) => {
+  const { addClient } = useClient(); // Obtém a função addClient do contexto
   const [clientData, setClientData] = useState<Partial<Types.Client>>({
     id: '',
     nome_exibicao: '',
@@ -34,13 +35,11 @@ const AddClientModal: React.FC<AddClientModalProps> = ({ show, handleClose, onCl
 
     setLoading(true);
     try {
-      await api.post('/clients', clientData);
-      toast.success('Cliente adicionado com sucesso!');
-      onClientAdded();
+      // Chama a função addClient do contexto
+      await addClient(clientData as Types.Client);
       handleClose();
     } catch (error: any) {
-      console.error('Erro ao adicionar cliente:', error);
-      toast.error(`Erro ao adicionar cliente: ${error.response?.data?.detail || error.message}`);
+      // Erro já tratado no contexto, mas pode-se adicionar lógica extra aqui se necessário
     } finally {
       setLoading(false);
     }
@@ -84,7 +83,7 @@ const AddClientModal: React.FC<AddClientModalProps> = ({ show, handleClose, onCl
           Cancelar
         </Button>
         <Button
-          style={{ backgroundColor: 'var(--cta-yellow)', borderColor: 'var(--cta-yellow)', color: 'var(--dark-contrast)' }}
+          className="btn-cta"
           onClick={handleSubmit}
           disabled={loading}
         >

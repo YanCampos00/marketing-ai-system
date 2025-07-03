@@ -2,296 +2,211 @@ import pandas as pd
 import os
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import logging
 import traceback
+from typing import List, Dict, Any
 
-from app.utils.data_cleaners import limpar_numero, limpar_porcentagem
+from app.agents.base_agent import BaseAgent
+from app.utils.prompt_loader import load_prompt
+from app.core.connectors.base_connector import BaseConnector
+from app.utils.data_cleaners import limpar_numero
 from app.utils.data_formatters import formatar_markdown_consolidado
 from app.utils.marketing_metrics import roi, cps, tkm, conversion_rate, cpc, cpm, percent_change
-from app.utils.file_utils import gerar_caminho_kpis_json, save_to_file
-from app.utils.custom_exceptions import (
-    PlanilhaNaoEncontradaError, 
-    AbaNaoEncontradaError, 
-    ColunaNaoEncontradaError, 
-    ErroLeituraDadosError,
-    FormatoDataInvalidoError,
-    ErroProcessamentoDadosAgente
-)
-from app.core.gsheet_connector import extrair_dados_base
-from app.config.config_loader import carregar_config_global
-from app.utils.prompt_loader import carregar_prompt_de_arquivo
+from app.utils.save_json import salvar_json_kpis
+from app.utils.file_utils import create_directory_if_not_exists
 
-# Carrega o prompt do agente de mídia
-PROMPT_FILE_PATH_MEDIA = "app/config/prompts/media_agent_prompt.txt"
-media_instructions_template = carregar_prompt_de_arquivo(PROMPT_FILE_PATH_MEDIA)
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
-if media_instructions_template is None:
-    print("ERRO CRÍTICO: Template de instruções do Agente de Mídia não pôde ser carregado. A aplicação pode não funcionar corretamente.")
-    media_instructions_template = "ERRO DE CARREGAMENTO DE PROMPT - MEDIA"
-
-# Mapeamento de nomes de colunas da planilha (Português) para o código (Inglês)
-COLUMN_MAPPING = {
-    'Data': 'Date',
-    'Investimento': 'Spend',
-    'Receita': 'Revenue',
-    'Sessões': 'Sessions',
-    'Conversões': 'Conversions',
-    'Cliques': 'Clicks',
-    'Impressões': 'Impressions',
-    'ROI (Return Over Investiment)': 'ROI',
-    'CPS (Custo por Sessão)': 'CPS',
-    'TKM (Ticket Médio)': 'TKM',
-    'Taxa de Conversão': 'Conversion_Rate',
-}
-
-# Colunas obrigatórias para qualquer plataforma de mídia (em inglês, para uso interno)
-COLUNAS_OBRIGATORIAS_BASE_EN = ['Date', 'Spend', 'Revenue', 'Sessions', 'Conversions']
-
-# Mapeamento de métricas para suas funções de cálculo e suas dependências de coluna (em inglês)
-METRICAS_DISPONIVEIS = {
-    'ROI': {'func': roi, 'deps': ['Revenue', 'Spend']},
-    'CPS': {'func': cps, 'deps': ['Spend', 'Sessions']},
-    'TKM': {'func': tkm, 'deps': ['Revenue', 'Conversions']},
-    'Conversion_Rate': {'func': conversion_rate, 'deps': ['Conversions', 'Sessions']},
-    'CPC': {'func': cpc, 'deps': ['Spend', 'Clicks']},
-    'CPM': {'func': cpm, 'deps': ['Spend', 'Impressions']},
-}
-
-def get_media_data_tool(gspread_client, tool_input_params, str_mes_analise_atual):
+class MediaAgent(BaseAgent):
     """
-    Extrai, processa e formatar dados de uma plataforma de mídia específica.
-    tool_input_params deve ser um dicionário contendo:
-    - 'plataforma': Nome da plataforma (ex: 'Google Ads', 'Meta Ads')
-    - 'nome_planilha': Nome da planilha no Google Sheets
-    - 'nome_aba': Nome da aba na planilha
-    - 'colunas_extras': Lista de colunas adicionais específicas da plataforma (ex: ['Clicks', 'Impressions'])
-    - 'metricas_selecionadas': Lista de strings com os nomes das métricas a serem calculadas (ex: ['ROI', 'CPC'])
+    Agente especializado em analisar dados de mídia paga (Google Ads, Meta Ads).
     """
-    plataforma = tool_input_params.get('plataforma')
-    nome_planilha = tool_input_params.get('nome_planilha')
-    nome_aba = tool_input_params.get('nome_aba')
-    colunas_extras_en = tool_input_params.get('colunas_extras', []) # Colunas extras já em inglês
-    # Usa as métricas selecionadas passadas, ou todas as disponíveis como fallback
-    metricas_selecionadas = tool_input_params.get('metricas_selecionadas', list(METRICAS_DISPONIVEIS.keys()))
+    def __init__(self, llm_service, data_connector: BaseConnector):
+        super().__init__(llm_service)
+        self.data_connector = data_connector
+        self.METRICAS_DISPONIVEIS = {
+            'ROI': {'func': roi, 'deps': ['Revenue', 'Spend']},
+            'CPS': {'func': cps, 'deps': ['Spend', 'Sessions']},
+            'TKM': {'func': tkm, 'deps': ['Revenue', 'Conversions']},
+            'Conversion_Rate': {'func': conversion_rate, 'deps': ['Conversions', 'Sessions']},
+            'CPC': {'func': cpc, 'deps': ['Spend', 'Clicks']},
+            'CPM': {'func': cpm, 'deps': ['Spend', 'Impressions']},
+        }
+        self.COLUMN_MAPPING = {
+            'Data': 'Date', 'Investimento': 'Spend', 'Receita': 'Revenue',
+            'Sessões': 'Sessions', 'Conversões': 'Conversions', 'Cliques': 'Clicks',
+            'Impressões': 'Impressions', 'ROI (Return Over Investiment)': 'ROI',
+            'CPS (Custo por Sessão)': 'CPS', 'TKM (Ticket Médio)': 'TKM',
+            'Taxa de Conversão': 'Conversion_Rate',
+        }
 
-    # Constrói a lista de colunas necessárias em inglês
-    colunas_necessarias_en = COLUNAS_OBRIGATORIAS_BASE_EN.copy()
-    for metrica_nome in metricas_selecionadas:
-        if metrica_nome in METRICAS_DISPONIVEIS:
-            for dep_col in METRICAS_DISPONIVEIS[metrica_nome]['deps']:
-                if dep_col not in colunas_necessarias_en:
-                    colunas_necessarias_en.append(dep_col)
-    
-    for col in colunas_extras_en:
-        if col not in colunas_necessarias_en:
-            colunas_necessarias_en.append(col)
+    def _normalize_metrics(self, metricas: List[str]) -> List[str]:
+        """Normaliza a lista de métricas para corresponder ao case esperado."""
+        normalized = []
+        for m in metricas:
+            found = False
+            for key in self.METRICAS_DISPONIVEIS.keys():
+                if m.lower() == key.lower():
+                    normalized.append(key)
+                    found = True
+                    break
+            if not found:
+                normalized.append(m.title())
+        return normalized
 
-    # Mapeia as colunas necessárias para o português para extrair da planilha
-    colunas_necessarias_pt = [pt_name for pt_name, en_name in COLUMN_MAPPING.items() if en_name in colunas_necessarias_en]
-    # Adiciona colunas extras que não estão no mapeamento padrão (se houver)
-    for col_en in colunas_extras_en:
-        if col_en not in COLUMN_MAPPING.values():
-            # Se a coluna extra não está no mapeamento, assume que o nome da planilha é o mesmo
-            colunas_necessarias_pt.append(col_en)
-
-    try:
-        print(f"Agente de Mídia ({plataforma}): Acessando planilha '{nome_planilha}', aba '{nome_aba}'...")
-        df_full = extrair_dados_base(
-            gspread_client,
-            nome_planilha,
-            nome_aba,
-            colunas_necessarias=colunas_necessarias_pt,
-            formato_data='%d/%m/%Y'
+    def _fetch_and_clean_data(self, data_source: str, client_config: dict, mes_analise: str) -> pd.DataFrame:
+        """Busca e limpa os dados da fonte especificada."""
+        data = self.data_connector.get_data(
+            data_source=data_source, client_config=client_config, mes_analise=mes_analise
         )
+        if data.empty:
+            return pd.DataFrame()
 
-        # Renomeia as colunas do DataFrame para os nomes em inglês
-        # Cria um dicionário de mapeamento inverso para renomear
-        reverse_column_mapping = {pt_name: en_name for pt_name, en_name in COLUMN_MAPPING.items()}
-        df_full.rename(columns=reverse_column_mapping, inplace=True)
-        print(f"[DEBUG MEDIA AGENT] DataFrame após renomear colunas ({plataforma}):\n{df_full.head()}")
+        df = data
+        logger.debug(f"DataFrame após extração ({data_source}):\n{df.head()}")
+        
+        df.rename(columns={pt: en for pt, en in self.COLUMN_MAPPING.items()}, inplace=True)
+        df['Date'] = pd.to_datetime(df['Date'], errors='coerce', format='%d/%m/%Y')
+        df.dropna(subset=['Date'], inplace=True)
 
-        # Converter colunas numéricas para tipo float, tratando erros
-        numeric_cols = [col for col in colunas_necessarias_en if col != 'Date']
+        numeric_cols = [col for col in df.columns if col != 'Date']
         for col in numeric_cols:
-            if col in df_full.columns:
-                df_full[col] = pd.to_numeric(df_full[col], errors='coerce')
+            original_col = df[col].copy()
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+            failed_mask = df[col].isna() & original_col.notna()
+            if failed_mask.any():
+                logger.debug(f"Limpando valores não numéricos na coluna '{col}'...")
+                df.loc[failed_mask, col] = original_col[failed_mask].apply(limpar_numero)
+                df[col] = pd.to_numeric(df[col], errors='coerce')
         
-        # Preencher NaNs com 0 após a conversão, para evitar erros em cálculos
-        df_full = df_full.fillna(0)
-        print(f"[DEBUG MEDIA AGENT] DataFrame após conversão numérica e fillna ({plataforma}):\n{df_full.head()}")
+        df = df.fillna(0)
+        logger.debug(f"DataFrame após limpeza ({data_source}):\n{df.head()}\n{df.dtypes}")
+        return df
 
-        # Calcular métricas selecionadas
-        for metrica_nome in metricas_selecionadas:
-            if metrica_nome in METRICAS_DISPONIVEIS:
-                func = METRICAS_DISPONIVEIS[metrica_nome]['func']
-                dependencies = METRICAS_DISPONIVEIS[metrica_nome]['deps']
+    def _calculate_metrics(self, df: pd.DataFrame, metricas: List[str]) -> pd.DataFrame:
+        """Calcula as métricas selecionadas e as adiciona ao DataFrame."""
+        for metrica_nome in metricas:
+            if metrica_nome in self.METRICAS_DISPONIVEIS:
+                config = self.METRICAS_DISPONIVEIS[metrica_nome]
+                if not all(dep in df.columns for dep in config['deps']):
+                    continue
                 
-                # Verifica se as colunas de dependência existem no DataFrame
-                if not all(dep_col in df_full.columns for dep_col in dependencies):
-                    print(f"Aviso: Métrica '{metrica_nome}' não calculada para {plataforma} devido à falta de colunas: {dependencies}")
-                    continue # Pula para a próxima métrica
+                # Usar apply com lambda para passar as colunas corretas para cada função
+                df[metrica_nome] = df.apply(
+                    lambda row: config['func'](*(row[dep] for dep in config['deps'])), 
+                    axis=1
+                )
+        return df
 
-                if metrica_nome == 'ROI':
-                    df_full['ROI'] = df_full.apply(lambda row: func(row['Revenue'], row['Spend']), axis=1)
-                elif metrica_nome == 'CPS':
-                    df_full['CPS'] = df_full.apply(lambda row: func(row['Spend'], row['Sessions']), axis=1)
-                elif metrica_nome == 'TKM':
-                    df_full['TKM'] = df_full.apply(lambda row: func(row['Revenue'], row['Conversions']), axis=1)
-                elif metrica_nome == 'Conversion_Rate':
-                    df_full['Conversion_Rate'] = df_full.apply(lambda row: func(row['Conversions'], row['Sessions']), axis=1)
-                elif metrica_nome == 'CPC': # Depende de Clicks
-                    df_full['CPC'] = df_full.apply(lambda row: func(row['Spend'], row['Clicks']), axis=1)
-                elif metrica_nome == 'CPM': # Depende de Impressions
-                    df_full['CPM'] = df_full.apply(lambda row: func(row['Spend'], row['Impressions']), axis=1)
-        print(f"[DEBUG MEDIA AGENT] DataFrame após cálculo de métricas ({plataforma}):\n{df_full.head()}")
+    def _summarize_and_compare(self, df: pd.DataFrame, mes_analise: str, metricas: List[str]) -> Dict[str, Any]:
+        """Filtra os dados por período e calcula os KPIs e comparativos."""
+        data_analise_dt = datetime.strptime(mes_analise, "%Y-%m-%d")
+        start_current = data_analise_dt.replace(day=1)
+        end_current = (start_current + relativedelta(months=1)) - relativedelta(days=1)
+        start_prev = start_current - relativedelta(months=1)
+        end_prev = (start_prev + relativedelta(months=1)) - relativedelta(days=1)
+        start_yoy = start_current - relativedelta(years=1)
+        end_yoy = (start_yoy + relativedelta(months=1)) - relativedelta(days=1)
 
-        try:
-            data_analise_dt = datetime.strptime(str_mes_analise_atual, "%Y-%m-%d")
-        except ValueError:
-            raise FormatoDataInvalidoError(f"Formato de 'str_mes_analise_atual' ('{str_mes_analise_atual}') inválido para {plataforma}. Use AAAA-MM-DD.")
-        
-        start_current_month = data_analise_dt.replace(day=1)
-        end_current_month = (start_current_month + relativedelta(months=1)) - relativedelta(days=1)
-        start_prev_month = start_current_month - relativedelta(months=1)
-        end_prev_month = (start_prev_month + relativedelta(months=1)) - relativedelta(days=1)
-        start_yoy_month = start_current_month - relativedelta(years=1)
-        end_yoy_month = (start_yoy_month + relativedelta(months=1)) - relativedelta(days=1)
+        periods = {
+            'atual': df[(df['Date'] >= start_current) & (df['Date'] <= end_current)],
+            'mom': df[(df['Date'] >= start_prev) & (df['Date'] <= end_prev)],
+            'yoy': df[(df['Date'] >= start_yoy) & (df['Date'] <= end_yoy)],
+        }
 
-        df_current = df_full[(df_full['Date'] >= start_current_month) & (df_full['Date'] <= end_current_month)]
-        df_prev_month = df_full[(df_full['Date'] >= start_prev_month) & (df_full['Date'] <= end_prev_month)]
-        df_yoy = df_full[(df_full['Date'] >= start_yoy_month) & (df_full['Date'] <= end_yoy_month)]
-        
         resumo_periodos = {}
-        for label, df_period in [
-            ('atual', df_current), 
-            ('mom', df_prev_month), 
-            ('yoy', df_yoy)
-        ]:
-            spend_total = df_period['Spend'].sum()
-            revenue_total = df_period['Revenue'].sum()
-            sessions_total = df_period['Sessions'].sum()
-            conversions_total = df_period['Conversions'].sum()
-            clicks_total = df_period['Clicks'].sum() if 'Clicks' in df_period.columns else 0
-            impressions_total = df_period['Impressions'].sum() if 'Impressions' in df_period.columns else 0
-
-            period_kpis = {
-                'Spend': spend_total,
-                'Revenue': revenue_total,
-                'Sessions': sessions_total,
-                'Conversions': conversions_total,
-            }
-            for metrica_nome in metricas_selecionadas:
-                if metrica_nome in METRICAS_DISPONIVEIS:
-                    dependencies = METRICAS_DISPONIVEIS[metrica_nome]['deps']
-                    if not all(dep_col in df_period.columns for dep_col in dependencies):
-                        continue # Pula se as dependências não existirem no df_period
-
-                    func = METRICAS_DISPONIVEIS[metrica_nome]['func']
-                    if metrica_nome == 'ROI':
-                        period_kpis['ROI'] = func(revenue_total, spend_total)
-                    elif metrica_nome == 'CPS':
-                        period_kpis['CPS'] = func(spend_total, sessions_total)
-                    elif metrica_nome == 'TKM':
-                        period_kpis['TKM'] = func(revenue_total, conversions_total)
-                    elif metrica_nome == 'Conversion_Rate':
-                        period_kpis['Conversion_Rate'] = func(conversions_total, sessions_total)
-                    elif metrica_nome == 'CPC':
-                        period_kpis['CPC'] = func(spend_total, clicks_total)
-                    elif metrica_nome == 'CPM':
-                        period_kpis['CPM'] = func(spend_total, impressions_total)
-            resumo_periodos[label] = period_kpis
-        print(f"[DEBUG MEDIA AGENT] Resumo de Períodos ({plataforma}):\n{resumo_periodos}")
+        for label, period_df in periods.items():
+            kpis = {}
+            if not period_df.empty:
+                base_metrics_sum = {m: period_df[m].sum() for m in metricas if m not in self.METRICAS_DISPONIVEIS and m in period_df}
+                kpis.update(base_metrics_sum)
+                
+                # Recalcula métricas compostas com base nos totais do período
+                deps_sum = {dep: period_df[dep].sum() for dep in ['Spend', 'Revenue', 'Sessions', 'Conversions', 'Clicks', 'Impressions'] if dep in period_df}
+                for metrica in [m for m in metricas if m in self.METRICAS_DISPONIVEIS]:
+                    config = self.METRICAS_DISPONIVEIS[metrica]
+                    deps_values = [deps_sum.get(dep, 0) for dep in config['deps']]
+                    kpis[metrica] = config['func'](*deps_values)
+            resumo_periodos[label] = kpis
 
         comparativos = {}
-        for metrica in metricas_selecionadas: # Itera apenas sobre as métricas selecionadas
-            if metrica in resumo_periodos['atual'] and metrica in resumo_periodos['mom']:
-                comparativos[f'{metrica}_MoM'] = percent_change(resumo_periodos['atual'].get(metrica), resumo_periodos['mom'].get(metrica))
-            if metrica in resumo_periodos['atual'] and metrica in resumo_periodos['yoy']:
-                comparativos[f'{metrica}_YoY'] = percent_change(resumo_periodos['atual'].get(metrica), resumo_periodos['yoy'].get(metrica))
-        print(f"[DEBUG MEDIA AGENT] Comparativos ({plataforma}):\n{comparativos}")
+        for metrica in metricas:
+            current_val = resumo_periodos['atual'].get(metrica, 0)
+            mom_val = resumo_periodos['mom'].get(metrica, 0)
+            yoy_val = resumo_periodos['yoy'].get(metrica, 0)
+            comparativos[f'{metrica}_MoM'] = percent_change(current_val, mom_val)
+            comparativos[f'{metrica}_YoY'] = percent_change(current_val, yoy_val)
 
-        # Formatação para markdown
-        markdown_parts = []
-        colunas_para_detalhe = ['Date', 'Spend', 'Revenue', 'Sessions', 'Conversions']
-        # Adiciona as colunas de métricas calculadas dinamicamente
-        for metrica_nome in metricas_selecionadas:
-            if metrica_nome == 'ROI': colunas_para_detalhe.append('ROI')
-            elif metrica_nome == 'CPS': colunas_para_detalhe.append('CPS')
-            elif metrica_nome == 'TKM': colunas_para_detalhe.append('TKM')
-            elif metrica_nome == 'Conversion_Rate': colunas_para_detalhe.append('Conversion_Rate')
-            elif metrica_nome == 'CPC': colunas_para_detalhe.append('CPC')
-            elif metrica_nome == 'CPM': colunas_para_detalhe.append('CPM')
+        kpis_finais = {k: v for k, v in resumo_periodos['atual'].items() if k in metricas}
+        return {"kpis": kpis_finais, "comparatives": comparativos, "resumo_periodos": resumo_periodos}
 
-        colunas_existentes_atual = [col for col in colunas_para_detalhe if col in df_current.columns]
-
-        if not df_current.empty and colunas_existentes_atual:
-            df_current_sorted = df_current.sort_values(by='Date')
-            # Arredondamento para exibição no markdown
-            for col in df_current_sorted.columns:
-                # Apenas tenta arredondar colunas que são numéricas
-                if pd.api.types.is_numeric_dtype(df_current_sorted[col]):
-                    if 'Spend' in col or 'Revenue' in col or 'Cost' in col or 'TKM' in col:
-                        df_current_sorted[col] = df_current_sorted[col].apply(lambda x: round(x, 2) if pd.notnull(x) else x)
-                    elif 'Rate' in col:
-                        df_current_sorted[col] = df_current_sorted[col].apply(lambda x: round(x, 4) if pd.notnull(x) else x)
-
-            markdown_parts.append(
-                f"**Detailed {plataforma} Data for {start_current_month.strftime('%B %Y')}:**\n"
-                f"{df_current_sorted[colunas_existentes_atual].to_markdown(index=False)}\n\n"
-            )       
-        else:
-            markdown_parts.append(f"**Detailed {plataforma} Data for {start_current_month.strftime('%B %Y')}:**\n- Data: Not available or insufficient columns.\n\n")
-
-        markdown_parts.append(formatar_markdown_consolidado(df_prev_month, 
-                                                              f"Comparative {plataforma} Previous Month ({start_prev_month.strftime('%B %Y')})"))
-        markdown_parts.append(formatar_markdown_consolidado(df_yoy, 
-                                                              f"Comparative {plataforma} Same Month Previous Year ({start_yoy_month.strftime('%B %Y')})"))
+    def _prepare_llm_prompt(self, data_source: str, client_name: str, client_config: dict, mes_analise: str, metricas: List[str], kpis: Dict, comparatives: Dict) -> str:
+        """Prepara o prompt final para ser enviado ao LLM."""
+        data_analise_dt = datetime.strptime(mes_analise, "%Y-%m-%d")
+        markdown_parts = [f"## Análise de {data_source.replace('_', ' ').title()} para {client_name} - Mês de {data_analise_dt.strftime('%B %Y')}\n"]
         
-        summary_last_4_months_md = f"**Consolidated {plataforma} Summary for Last 4 Months (prior to {start_current_month.strftime('%B %Y')}):**\n"
-        data_found_for_last_4_months = False
-        for i in range(2, 5):
-            month_start_hist = (start_current_month - relativedelta(months=i))
-            month_end_hist = (month_start_hist + relativedelta(months=1)) - relativedelta(days=1)
-            df_month_hist = df_full[(df_full['Date'] >= month_start_hist) & (df_full['Date'] <= month_end_hist)]
-            
-            if not df_month_hist.empty:
-                data_found_for_last_4_months = True
-            summary_last_4_months_md += formatar_markdown_consolidado(df_month_hist, 
-                                                                        f"{plataforma} - Month of {month_start_hist.strftime('%B %Y')}")
-        
-        if not data_found_for_last_4_months:
-             summary_last_4_months_md += "No data available for the last 4 months for summary.\n"
-        markdown_parts.append(summary_last_4_months_md)
+        kpis_df = pd.DataFrame([kpis])
+        markdown_parts.append(formatar_markdown_consolidado(kpis_df, "KPIs do Período Atual"))
 
-        print(f"Agente de Mídia ({plataforma}): Dados históricos e comparativos processados.")
+        comparatives_df = pd.DataFrame([comparatives])
+        markdown_parts.append(formatar_markdown_consolidado(comparatives_df, "Comparativos (MoM e YoY)"))
 
-        # Gerar caminho e salvar JSON de KPIs
-        mes_analise_formatado_json = start_current_month.strftime("%B de %Y")
-        # Passa o nome do cliente para gerar o caminho correto
-        caminho_json = gerar_caminho_kpis_json(plataforma, mes_analise_formatado_json, cliente_nome=tool_input_params.get('cliente_nome_para_kpis'))
+        metrics_list_md = "\n".join([f"- {m}" for m in metricas])
+        prompt_template = load_prompt('media_analysis')
         
-        # Salvar o JSON de KPIs
-        from app.utils.save_json import salvar_json_kpis # Importar aqui para evitar circular dependency
-        salvar_json_kpis(
-            plataforma=plataforma,
-            mes_analise=mes_analise_formatado_json,
-            resumo_periodos=resumo_periodos,
-            comparativos=comparativos,
-            pasta_saida=os.path.dirname(caminho_json),
-            sufixo_nome=plataforma.upper().replace(' ', '_'),
-            metricas_selecionadas=metricas_selecionadas # Passa as métricas selecionadas
+        return prompt_template.format(
+            plataforma=data_source.replace('_', ' ').title(),
+            cliente_contexto=client_config.get("contexto_cliente_prompt", ""),
+            dados_markdown_summary_month_name=data_analise_dt.strftime('%B de %Y'),
+            metrics_to_analyze_list_markdown=metrics_list_md,
+            dados_markdown="\n".join(markdown_parts)
         )
 
-        return {
-            "markdown": "".join(markdown_parts),
-            "caminho_json": caminho_json,
-        } 
+    def run(self, data_source: str, client_name: str, client_config: dict, mes_analise: str, metricas: list):
+        """
+        Executa o fluxo de análise de dados de mídia orquestrando os métodos privados.
+        """
+        logger.info(f"Executando MediaAgent para {data_source} do cliente {client_name}")
+        try:
+            # 1. Normalizar e Preparar
+            metricas_norm = self._normalize_metrics(metricas)
 
-    except (PlanilhaNaoEncontradaError, AbaNaoEncontradaError, ColunaNaoEncontradaError, 
-            ErroLeituraDadosError, FormatoDataInvalidoError) as e_custom:
-        raise e_custom 
-    except Exception as e:
-        tb_str = traceback.format_exc()
-        raise ErroProcessamentoDadosAgente(f"Erro inesperado na ferramenta de dados do Agente de Mídia ({plataforma}): {type(e).__name__} - {e}\nTraceback:\n{tb_str}")
+            # 2. Buscar e Limpar Dados
+            df = self._fetch_and_clean_data(data_source, client_config, mes_analise)
+            if df.empty:
+                return {"report": f"Não foram encontrados dados para {client_name} em {data_source}.", "kpis": {}, "comparatives": {}}
 
+            # 3. Calcular Métricas
+            df_com_metricas = self._calculate_metrics(df, metricas_norm)
 
+            # 4. Resumir e Comparar
+            analysis_results = self._summarize_and_compare(df_com_metricas, mes_analise, metricas_norm)
+            kpis_finais = analysis_results["kpis"]
+            comparativos_finais = analysis_results["comparatives"]
 
+            # 5. Salvar Artefatos (KPIs em JSON)
+            safe_client_name = "".join(c if c.isalnum() else "_" for c in client_name)
+            safe_mes_analise = mes_analise.replace("-", "_")
+            client_report_dir = os.path.join('app', 'reports', safe_client_name, safe_mes_analise)
+            create_directory_if_not_exists(client_report_dir)
+            salvar_json_kpis(
+                plataforma=data_source.replace('_', ' ').title(),
+                mes_analise=mes_analise,
+                resumo_periodos=analysis_results["resumo_periodos"],
+                comparativos=comparativos_finais,
+                pasta_saida=client_report_dir,
+                sufixo_nome=data_source.replace('_', ' ').title(),
+                metricas_selecionadas=metricas_norm
+            )
+
+            # 6. Preparar Prompt e Gerar Relatório
+            prompt = self._prepare_llm_prompt(data_source, client_name, client_config, mes_analise, metricas_norm, kpis_finais, comparativos_finais)
+            report = self.llm_service.generate_text(prompt)
+            
+            return {"report": report, "kpis": kpis_finais, "comparatives": comparativos_finais}
+
+        except Exception as e:
+            logger.error(f"Erro no MediaAgent.run para {data_source} do cliente {client_name}: {e}")
+            traceback.print_exc()
+            return {"report": f"Erro no MediaAgent para {data_source}: {e}", "kpis": {}, "comparatives": {}}
