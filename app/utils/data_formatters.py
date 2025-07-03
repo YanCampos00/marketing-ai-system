@@ -1,17 +1,5 @@
 import pandas as pd
 
-def format_to_string_table(df: pd.DataFrame, max_rows=50) -> str:
-    """
-    Formata um DataFrame como uma tabela de string bem formatada.
-    """
-    return df.to_string(index=False, max_rows=max_rows)
-
-def format_to_markdown_table(df: pd.DataFrame, max_rows=50) -> str:
-    """
-    Formata um DataFrame como uma tabela em formato Markdown.
-    """
-    return df.to_markdown(index=False, tablefmt="pipe")
-
 def formatar_markdown_consolidado(df: pd.DataFrame, titulo: str) -> str:
     """
     Formata um DataFrame (como KPIs ou comparativos) em uma tabela Markdown com um título.

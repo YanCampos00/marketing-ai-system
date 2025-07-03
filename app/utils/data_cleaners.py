@@ -1,33 +1,6 @@
 import pandas as pd
 import re
 
-def clean_text(text: str) -> str:
-    """
-    Limpa um texto, removendo espaços extras e caracteres especiais.
-    """
-    text = re.sub(r'\s+', ' ', text) # Remove espaços múltiplos
-    text = text.strip()
-    return text
-
-def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Realiza uma limpeza básica em um DataFrame.
-    - Remove linhas e colunas completamente vazias.
-    - Converte nomes de colunas para snake_case.
-    """
-    # Remove linhas e colunas vazias
-    df.dropna(how='all', inplace=True)
-    df.dropna(axis=1, how='all', inplace=True)
-
-    # Limpa nomes das colunas
-    new_columns = {}
-    for col in df.columns:
-        new_col = col.strip().lower().replace(' ', '_')
-        new_columns[col] = new_col
-    df.rename(columns=new_columns, inplace=True)
-    
-    return df
-
 def limpar_numero(valor):
     """
     Converte para float, tratando diferentes formatos numéricos (BR/US) e símbolos.

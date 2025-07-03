@@ -1,5 +1,8 @@
 import google.generativeai as genai
-from app.config.settings import settings # Importar settings
+import logging
+from app.config.settings import settings
+
+logger = logging.getLogger(__name__)
 
 class LLMService:
     """
@@ -30,7 +33,7 @@ class LLMService:
             response = self.model.generate_content(prompt)
             return response.text
         except Exception as e:
-            print(f"Erro ao gerar texto com o LLM: {e}")
+            logger.error(f"Erro ao gerar texto com o LLM: {e}")
             # Implementar lógica de retentativa se necessário
             return "Ocorreu um erro ao gerar a resposta."
 

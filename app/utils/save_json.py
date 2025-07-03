@@ -1,37 +1,9 @@
 import json
 import os
 from datetime import datetime
+import logging
 
-def save_json(data, client_name, data_source):
-    """
-    Salva os dados em um arquivo JSON estruturado por pastas.
-
-    Args:
-        data (dict): Os dados a serem salvos.
-        client_name (str): Nome do cliente para criar a pasta.
-        data_source (str): Fonte dos dados (ex: 'google_ads') para subpasta.
-    """
-    # Define o caminho base para os relatórios
-    base_path = os.path.join('app', 'reports')
-    
-    # Cria o caminho completo do diretório
-    client_path = os.path.join(base_path, client_name)
-    source_path = os.path.join(client_path, data_source)
-    
-    # Cria os diretórios se não existirem
-    os.makedirs(source_path, exist_ok=True)
-    
-    # Gera um nome de arquivo com timestamp
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"{timestamp}_report.json"
-    file_path = os.path.join(source_path, file_name)
-    
-    # Salva o arquivo JSON
-    with open(file_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-        
-    print(f"Relatório salvo com sucesso em: {file_path}")
-    return file_path
+logger = logging.getLogger(__name__)
 
 def salvar_json_kpis(
     plataforma: str,
@@ -77,14 +49,4 @@ def salvar_json_kpis(
 
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data_to_save, f, ensure_ascii=False, indent=4)
-    print(f"KPIs salvos em: {file_path}")
     return file_path
-
-def carregar_kpis_json(file_path: str):
-    """
-    Carrega um arquivo JSON de KPIs.
-    """
-    if not os.path.exists(file_path):
-        return None
-    with open(file_path, 'r', encoding='utf-8') as f:
-        return json.load(f)

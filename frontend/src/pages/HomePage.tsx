@@ -62,15 +62,20 @@ const HomePage: React.FC = () => {
 
   const handleAnalysisComplete = () => {
     setIsAnalysisInProgress(false);
-    toast.success(
-      <div>
-        Análise concluída com sucesso!
-        <br />
-        <Link to="/history" className="btn btn-sm btn-light mt-2">
-          Ver no Histórico
-        </Link>
-      </div>
-    );
+    toast.update('analysis-progress', {
+      render: (
+        <div>
+          Análise concluída com sucesso!
+          <br />
+          <Link to="/history" className="btn btn-sm btn-light mt-2">
+            Ver no Histórico
+          </Link>
+        </div>
+      ),
+      type: 'success',
+      autoClose: 5000,
+      closeButton: true,
+    });
     handleCloseAnalysisModal();
   };
 
