@@ -122,9 +122,9 @@ const HomePage: React.FC = () => {
         clients.length === 0 ? (
           <p>Nenhum cliente cadastrado. Adicione um novo cliente para começar.</p>
         ) : (
-          <ul className="list-group">
+          <ul className="client-list">
             {clients.map((client) => (
-              <li key={client.id} className="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary mb-2">
+              <li key={client.id} className="client-card">
                 <div>
                   <h5>{client.nome_exibicao}</h5>
                   <small className="text-white-50">ID: {client.id}</small>

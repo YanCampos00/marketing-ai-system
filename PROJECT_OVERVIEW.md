@@ -58,6 +58,7 @@ O projeto segue uma estrutura de monorepo com duas pastas principais: `/app` (ba
     -   **`/src/components`**: Componentes de UI reutilizáveis (Modais, Botões, etc.).
     -   **`/src/context`**: Provedores de Contexto (`ClientContext`, `PromptContext`) para gerenciamento de estado global.
     -   **`/src/services`**: Lógica de comunicação com a API, incluindo a instância do Axios e interceptadores de erro.
+    -   **`/src/styles`**: Arquivos de estilo customizados (`custom.css`) que definem a aparência geral e estilizam componentes específicos, como os cards de cliente na HomePage.
     -   **`/src/types`**: Definições de tipos TypeScript.
     -   **`App.tsx`**: Componente raiz que configura o roteamento da aplicação.
 

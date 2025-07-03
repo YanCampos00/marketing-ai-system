@@ -2,30 +2,39 @@
 
 ##Resumo Executivo e Insights Estratégicos
 
-Junho de 2025 apresentou um desempenho misto para Le Lis, com resultados contrastantes entre as plataformas de anúncios.  Enquanto o Meta Ads demonstrou crescimento no ROI ano a ano (8.38%), apresentou queda mês a mês (-19.14%), sinalizando problemas de otimização de orçamento e, possivelmente, segmentação.  O Google Ads, por outro lado, apresentou ausência completa de dados para o mês, indicando uma falha crítica que requer investigação imediata.  A queda na receita do Meta Ads ano a ano (-7.73%) demanda análise profunda para identificar fatores estruturais, como concorrência ou mudanças de mercado.
+Junho de 2025 apresentou um crescimento de receita significativo para Le Lis (24.71% YoY em Google Ads e -7.73% YoY em Meta Ads), impulsionado principalmente pelas campanhas do Google Ads.  No entanto, esse crescimento foi acompanhado por um aumento acentuado nos gastos, resultando em uma queda no ROI tanto no Google Ads (-17.94% YoY) quanto no Meta Ads (-19.14% MoM).  A análise MoM revela uma piora do ROI em ambas as plataformas, indicando a necessidade urgente de otimização das campanhas e alocação mais eficiente dos recursos.
 
-O aumento significativo nos gastos do Meta Ads (46.76% MoM) sem um aumento proporcional na receita é preocupante e indica a necessidade urgente de otimização da estratégia.  A ausência de dados do Google Ads impede qualquer análise significativa e ação corretiva nesse canal.  A prioridade é resolver o problema de ausência de dados do Google Ads e, em paralelo, otimizar as campanhas do Meta Ads para melhorar a eficiência do investimento e reverter a queda na receita ano a ano.
+O principal desafio reside na falta de proporcionalidade entre o aumento de gastos e o retorno obtido. Embora o crescimento de receita seja positivo, a diminuição do ROI indica ineficiência no investimento.  A análise detalhada por plataforma aponta para a necessidade de investigar campanhas de baixo desempenho e otimizar a segmentação para melhorar a conversão.  O sucesso demonstrado por algumas campanhas, tanto no Google Ads quanto no Meta Ads, sugere a existência de estratégias eficazes que precisam ser replicadas e ampliadas.
 
-Para o próximo mês, é crucial resolver a falha de dados do Google Ads, realizar uma análise completa da performance deste canal nos últimos meses e implementar ajustes estratégicos com base nos dados recuperados.  No Meta Ads, a prioridade é otimizar a alocação de orçamento, testar novas estratégias de segmentação e criativos com foco na melhoria do ROI e na recuperação da receita ano a ano.  Uma análise comparativa entre as estratégias bem-sucedidas do ano anterior e as atuais ajudará a identificar oportunidades de melhoria.
-
-##Dados Consolidados e Comparativos (Conforme fornecido)
+Para o próximo mês, é crucial priorizar a otimização das campanhas de menor performance em ambas as plataformas, focando na redução do CPA e no aumento da conversão.  Deve-se investir na análise dos dados para identificar padrões e insights que permitam melhorar a segmentação de público, a criação de anúncios e a otimização de lances.  Recomendamos também uma análise comparativa entre campanhas de alto e baixo desempenho para identificar os fatores de sucesso e replicá-los. A integração entre as plataformas deve ser explorada para atingir públicos específicos com mensagens personalizadas e otimizar a jornada do cliente.
 
 
-##Análises Detalhadas por Plataforma (Conforme fornecido)
+##Dados Consolidados e Comparativos de Performance (MoM e YoY)
+
+**(Dados apresentados no documento original)**
+
+
+##Análises Detalhadas por Plataforma
+
+**(Análises detalhadas do Google Ads e Meta Ads apresentadas no documento original)**
 
 
 ##Conclusão e Próximos Passos
 
-**Prioridades:**
+O aumento de receita em junho foi positivo, porém não sustentável com a atual estratégia de gastos. A prioridade para julho é reverter a tendência de queda no ROI, focando nas seguintes ações:
 
-1. **Investigar e solucionar URGENTEMENTE a ausência de dados do Google Ads.**  Sem dados, não é possível tomar decisões eficazes para esse canal.  A investigação deve abranger todos os aspectos técnicos e operacionais.
+**Prioridade Alta (Impacto Imediato):**
 
-2. **Otimizar a performance do Meta Ads:**
-    * **Analisar a alocação de orçamento:** Identificar os segmentos e canais que estão gerando menor retorno e realocar recursos para áreas mais eficazes.
-    * **Refocar a segmentação:** Revisar a segmentação atual e testar novas opções para alcançar o público-alvo com maior precisão.
-    * **Testar novos criativos:** Implementar A/B tests com diferentes criativos para identificar aqueles que geram maior engajamento e conversão.
-    * **Analisar profundamente a queda de receita YoY:** Investigar fatores externos (concorrência, mudanças de mercado) e internos (estratégia, ofertas).
+1. **Análise profunda das campanhas de baixo ROI:** Identificar as causas da baixa performance em ambas as plataformas (Google Ads e Meta Ads) e implementar correções imediatas (ex: ajustes de palavras-chave, segmentação, lances, criativos).
+2. **Otimização de lances:** Refinar estratégias de lances em ambas as plataformas para maximizar o retorno com o orçamento disponível.  Testar diferentes estratégias de lances (automáticas e manuais) para encontrar a melhor opção.
+3. **A/B Testing de criativos:** Implementar testes A/B em anúncios para identificar os elementos mais eficazes em termos de cliques e conversões.
 
-3. **Implementar um sistema de monitoramento mais robusto:** Assegurar que todos os dados de todas as plataformas sejam coletados e monitorados regularmente para evitar futuras falhas.
+**Prioridade Média (Impacto a Médio Prazo):**
 
-**Integração das Plataformas:**  Após a resolução do problema do Google Ads, uma análise comparativa entre as duas plataformas permitirá identificar as melhores práticas e replicá-las em ambos os canais, maximizando o ROI.  A integração de dados permitirá uma visão mais holística da performance e otimização da estratégia de marketing digital como um todo.
+4. **Análise comparativa de campanhas de sucesso:**  Identificar as características comuns das campanhas de alto ROI e replicá-las em outras campanhas.
+5. **Integração de plataformas:** Explorar a integração entre Google Ads e Meta Ads para otimizar o alcance e a segmentação de público, evitando sobreposição e maximizando a eficiência dos gastos.
+6. **Melhoria da segmentação:** Aprimorar a segmentação de público-alvo em ambas as plataformas utilizando dados demográficos, comportamentais e de interesse para atingir o público mais propenso à conversão.
+
+**Monitoramento Contínuo:**
+
+Monitorar diariamente os KPIs chave (Spend, Revenue, ROI, CPA) em ambas as plataformas para garantir a eficácia das ações implementadas e realizar ajustes em tempo real, caso necessário.  Relatórios semanais detalhados devem ser produzidos para acompanhamento da performance e tomada de decisões estratégicas.
