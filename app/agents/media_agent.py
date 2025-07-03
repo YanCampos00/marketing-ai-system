@@ -64,7 +64,7 @@ class MediaAgent(BaseAgent):
             return pd.DataFrame()
 
         df = data
-        logger.info(f"[DEBUG] DataFrame após extração ({data_source}):\n{df.head()}")
+        logger.debug(f"DataFrame após extração ({data_source}):\n{df.head()}")
         
         df.rename(columns={pt: en for pt, en in self.COLUMN_MAPPING.items()}, inplace=True)
         df['Date'] = pd.to_datetime(df['Date'], errors='coerce', format='%d/%m/%Y')
@@ -76,12 +76,12 @@ class MediaAgent(BaseAgent):
             df[col] = pd.to_numeric(df[col], errors='coerce')
             failed_mask = df[col].isna() & original_col.notna()
             if failed_mask.any():
-                logger.warning(f"[DEBUG] Limpando valores não numéricos na coluna '{col}'...")
+                logger.debug(f"Limpando valores não numéricos na coluna '{col}'...")
                 df.loc[failed_mask, col] = original_col[failed_mask].apply(limpar_numero)
                 df[col] = pd.to_numeric(df[col], errors='coerce')
         
         df = df.fillna(0)
-        logger.info(f"[DEBUG] DataFrame após limpeza ({data_source}):\n{df.head()}\n{df.dtypes}")
+        logger.debug(f"DataFrame após limpeza ({data_source}):\n{df.head()}\n{df.dtypes}")
         return df
 
     def _calculate_metrics(self, df: pd.DataFrame, metricas: List[str]) -> pd.DataFrame:
