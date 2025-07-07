@@ -137,21 +137,20 @@ const HistoryPage: React.FC = () => {
           {filteredReports.length > 0 ? (
             filteredReports.map((report, index) => (
               <Col md={6} lg={4} key={index} className="mb-4">
-                <Card className="bg-dark text-white h-100">
-                  <Card.Body>
-                    <Card.Title>{report.client_name}</Card.Title>
-                    <Card.Subtitle className="mb-2">
-                      <span className="text-white-50">Análise de: {new Date(report.mes_analise).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric', timeZone: 'UTC' })}</span>
-                    </Card.Subtitle>
-                    <Card.Text>
-                      <small>ID do Cliente: {report.client_id}</small>
-                    </Card.Text>
+                <Card className="client-card h-100">
+                  <Card.Body className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <Card.Title as="h5" className="mb-1">{report.client_name}</Card.Title>
+                      <small className="text-white-50">
+                        {new Date(report.mes_analise).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric', timeZone: 'UTC' })}
+                      </small>
+                    </div>
                     <Button 
                       variant="primary" 
                       className="btn-cta"
                       onClick={() => handleShowReportModal(report)}
                     >
-                      Ver Relatório Detalhado
+                      Ver Relatório
                     </Button>
                   </Card.Body>
                 </Card>

@@ -169,27 +169,23 @@ class MediaAgent(BaseAgent):
         """
         logger.info(f"Executando MediaAgent para {data_source} do cliente {client_name}")
         try:
-            # 1. Normalizar e Preparar
             metricas_norm = self._normalize_metrics(metricas)
-
-            # 2. Buscar e Limpar Dados
+            
             df = self._fetch_and_clean_data(data_source, client_config, mes_analise)
             if df.empty:
-                return {"report": f"Não foram encontrados dados para {client_name} em {data_source}.", "kpis": {}, "comparatives": {}}
+                raise ErroLeituraDadosError(f"Não foram encontrados dados para {client_name} em {data_source} para o mês {mes_analise}.")
 
-            # 3. Calcular Métricas
             df_com_metricas = self._calculate_metrics(df, metricas_norm)
-
-            # 4. Resumir e Comparar
+            
             analysis_results = self._summarize_and_compare(df_com_metricas, mes_analise, metricas_norm)
             kpis_finais = analysis_results["kpis"]
             comparativos_finais = analysis_results["comparatives"]
 
-            # 5. Salvar Artefatos (KPIs em JSON)
             safe_client_name = "".join(c if c.isalnum() else "_" for c in client_name)
             safe_mes_analise = mes_analise.replace("-", "_")
             client_report_dir = os.path.join('app', 'reports', safe_client_name, safe_mes_analise)
             create_directory_if_not_exists(client_report_dir)
+            
             salvar_json_kpis(
                 plataforma=data_source.replace('_', ' ').title(),
                 mes_analise=mes_analise,
@@ -200,13 +196,23 @@ class MediaAgent(BaseAgent):
                 metricas_selecionadas=metricas_norm
             )
 
-            # 6. Preparar Prompt e Gerar Relatório
             prompt = self._prepare_llm_prompt(data_source, client_name, client_config, mes_analise, metricas_norm, kpis_finais, comparativos_finais)
             report = self.llm_service.generate_text(prompt)
             
             return {"report": report, "kpis": kpis_finais, "comparatives": comparativos_finais}
 
+        except (PlanilhaNaoEncontradaError, AbaNaoEncontradaError, ColunaNaoEncontradaError, ErroLeituraDadosError) as e:
+            logger.error(f"Erro de dados ao executar MediaAgent para {data_source} do cliente {client_name}: {e}", exc_info=True)
+            raise ErroProcessamentoDadosAgente(f"Falha na obtenção ou processamento de dados para {data_source}: {e}")
+        
+        except ErroCalculoMetricas as e:
+            logger.error(f"Erro de cálculo ao executar MediaAgent para {data_source} do cliente {client_name}: {e}", exc_info=True)
+            raise ErroProcessamentoDadosAgente(f"Falha no cálculo de métricas para {data_source}: {e}")
+
+        except LLMConnectionError as e:
+            logger.error(f"Erro de LLM ao executar MediaAgent para {data_source} do cliente {client_name}: {e}", exc_info=True)
+            raise ErroGeracaoRelatorio(f"Falha na comunicação com o serviço de linguagem para gerar o relatório de {data_source}: {e}")
+
         except Exception as e:
-            logger.error(f"Erro no MediaAgent.run para {data_source} do cliente {client_name}: {e}")
-            traceback.print_exc()
-            return {"report": f"Erro no MediaAgent para {data_source}: {e}", "kpis": {}, "comparatives": {}}
+            logger.error(f"Erro inesperado no MediaAgent.run para {data_source} do cliente {client_name}: {e}", exc_info=True)
+            raise ErroGeracaoRelatorio(f"Ocorreu um erro inesperado ao gerar o relatório de {data_source}: {e}")

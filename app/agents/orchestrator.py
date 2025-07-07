@@ -8,6 +8,7 @@ from app.core.llm_service import get_llm_service
 from app.utils.file_utils import save_to_file, get_report_path
 from app.core.connectors.google_sheets_connector import GoogleSheetsConnector
 from app.utils.data_formatters import formatar_markdown_consolidado
+from app.utils.custom_exceptions import ErroProcessamentoDadosAgente, ErroGeracaoRelatorio
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -25,11 +26,13 @@ class Orchestrator:
     def executar_fluxo_analise_cliente(self, cliente_config: dict, mes_analise_atual_str: str, metricas_selecionadas: list):
         """
         Executa o fluxo de análise de mídia para um cliente específico.
+        Retorna o caminho do arquivo do relatório final em caso de sucesso,
+        ou um dicionário de erro em caso de falha.
         """
         client_name = cliente_config.get("nome_exibicao", "Cliente Desconhecido")
-
         google_results = None
         meta_results = None
+        errors = []
 
         try:
             google_results = self.media_agent.run(
@@ -39,9 +42,11 @@ class Orchestrator:
                 mes_analise=mes_analise_atual_str,
                 metricas=metricas_selecionadas
             )
-        except Exception as e:
-            logger.error(f"Erro ao executar MediaAgent para Google Ads: {e}", exc_info=True)
-            google_results = {"report": "Erro ao gerar relatório do Google Ads.", "kpis": {}, "comparatives": {}}
+        except (ErroProcessamentoDadosAgente, ErroGeracaoRelatorio) as e:
+            error_message = f"Erro na análise do Google Ads: {e}"
+            logger.error(error_message, exc_info=True)
+            errors.append(error_message)
+            google_results = {"report": f"Falha na geração do relatório do Google Ads. Detalhes: {e}", "kpis": {}, "comparatives": {}}
 
         try:
             meta_results = self.media_agent.run(
@@ -51,9 +56,15 @@ class Orchestrator:
                 mes_analise=mes_analise_atual_str,
                 metricas=metricas_selecionadas
             )
-        except Exception as e:
-            logger.error(f"Erro ao executar MediaAgent para Meta Ads: {e}", exc_info=True)
-            meta_results = {"report": "Erro ao gerar relatório do Meta Ads.", "kpis": {}, "comparatives": {}}
+        except (ErroProcessamentoDadosAgente, ErroGeracaoRelatorio) as e:
+            error_message = f"Erro na análise do Meta Ads: {e}"
+            logger.error(error_message, exc_info=True)
+            errors.append(error_message)
+            meta_results = {"report": f"Falha na geração do relatório do Meta Ads. Detalhes: {e}", "kpis": {}, "comparatives": {}}
+
+        # Se ambas as análises falharam, retorna um erro geral.
+        if google_results is None and meta_results is None:
+            return {"error": "Todas as fontes de dados falharam.", "details": errors}
 
         final_report = "Erro ao gerar relatório consolidado."
         try:
@@ -93,15 +104,20 @@ class Orchestrator:
 
         except Exception as e:
             logger.error(f"Erro ao gerar relatório consolidado com LLM: {e}", exc_info=True)
+            errors.append(f"Erro na consolidação do relatório final: {e}")
+            # Retorna um dicionário de erro se a consolidação falhar.
+            return {"error": "Falha ao gerar o relatório consolidado.", "details": errors}
 
         file_path = get_report_path(client_name, mes_analise_atual_str, file_type="consolidated")
         try:
             save_to_file(file_path, final_report)
         except Exception as e:
             logger.error(f"Erro ao salvar relatório final: {e}", exc_info=True)
-            return "Erro ao salvar relatório final."
+            # Retorna um dicionário de erro se o salvamento falhar.
+            return {"error": "Erro ao salvar o relatório final.", "details": [str(e)]}
 
-        return file_path
+        # Retorna o caminho do arquivo em caso de sucesso
+        return {"file_path": file_path, "errors": errors if errors else None}
 
 def get_orchestrator():
     """

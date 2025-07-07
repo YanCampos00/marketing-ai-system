@@ -33,3 +33,11 @@ class ErroLeituraDadosError(ErroProcessamentoDadosAgente):
 class FormatoDataInvalidoError(ErroProcessamentoDadosAgente):
     """Erro lançado quando o formato da data no str_mes_analise_atual é inválido."""
     pass
+
+class ErroCalculoMetricas(ErroProcessamentoDadosAgente):
+    """Erro lançado quando ocorre um problema no cálculo de métricas."""
+    pass
+
+class ErroGeracaoRelatorio(ErroProcessamentoDadosAgente):
+    """Erro lançado quando ocorre um problema na geração do relatório final."""
+    pass

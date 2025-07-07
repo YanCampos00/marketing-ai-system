@@ -205,17 +205,33 @@ async def run_analysis(request: AnalysisRequest, db: Session = Depends(get_db)):
     client_config_dict = ClientInDB.from_orm(client_config_db).dict()
     mes_analise_str = request.mes_analise.strftime("%Y-%m-%d")
 
-    # O bloco try/except foi removido daqui. As exceções agora serão capturadas pelo middleware.
-    caminho_relatorio = orchestrator.executar_fluxo_analise_cliente(
+    # A execução do fluxo agora retorna um dicionário
+    result = orchestrator.executar_fluxo_analise_cliente(
         cliente_config=client_config_dict,
         mes_analise_atual_str=mes_analise_str,
         metricas_selecionadas=request.metricas_selecionadas
     )
-    if caminho_relatorio:
-        return {"message": "Análise concluída com sucesso!", "report_path": str(caminho_relatorio)}
-    else:
-        # Se o fluxo terminar sem erro mas não retornar um caminho, algo está errado.
-        raise HTTPException(status_code=500, detail="Análise concluída, mas o relatório final não foi gerado.")
+
+    # Verifica se houve erro na execução
+    if "error" in result:
+        raise HTTPException(
+            status_code=500,
+            detail={"message": result["error"], "details": result.get("details", [])}
+        )
+
+    # Se não houver a chave 'file_path', algo inesperado ocorreu
+    if "file_path" not in result:
+        raise HTTPException(
+            status_code=500,
+            detail="Análise concluída, mas o caminho do relatório final não foi retornado."
+        )
+
+    # Retorna sucesso com o caminho do arquivo e possíveis erros não fatais
+    return {
+        "message": "Análise concluída com sucesso!",
+        "report_path": str(result["file_path"]),
+        "warnings": result.get("errors")
+    }
 
 @app.get("/reports/list", response_model=List[ReportSummary])
 async def list_reports(db: Session = Depends(get_db)):

@@ -1,10 +1,7 @@
 
 import axios from 'axios';
-import { toast } from 'react-toastify'; // Importa o toast
+import { toast } from 'react-toastify';
 
-// A URL base da API é lida da variável de ambiente VITE_API_BASE_URL.
-// O Vite substitui `import.meta.env.VITE_API_BASE_URL` em tempo de build.
-// Fornecemos um valor padrão para o caso de a variável não estar definida.
 const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
 const api = axios.create({
@@ -18,8 +15,28 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message = error.response?.data?.detail || error.message || 'Ocorreu um erro inesperado.';
-    toast.error(message);
+    let errorMessage = 'Ocorreu um erro inesperado.';
+
+    if (error.response && error.response.data && error.response.data.detail) {
+      const errorDetail = error.response.data.detail;
+
+      if (typeof errorDetail === 'object' && errorDetail.message) {
+        // Estrutura de erro customizada: { message: string, details: [] }
+        errorMessage = errorDetail.message;
+        if (errorDetail.details && Array.isArray(errorDetail.details) && errorDetail.details.length > 0) {
+          const detailsText = errorDetail.details.join('; ');
+          errorMessage += `: ${detailsText}`;
+        }
+      } else if (typeof errorDetail === 'string') {
+        // Estrutura de erro padrão da FastAPI
+        errorMessage = errorDetail;
+      }
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+
+    toast.error(errorMessage, { autoClose: 8000 }); // Aumenta o tempo de exibição para erros detalhados
+
     return Promise.reject(error);
   }
 );
